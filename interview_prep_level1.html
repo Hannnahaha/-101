@@ -1,0 +1,1570 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>找工101（beta测试版）</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #111827;
+      --sub: #4b5563;
+      --border: #e5e7eb;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --danger: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    h1, h2, h3 { margin: 0 0 10px; line-height: 1.35; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 20px; }
+    p { margin: 8px 0; color: var(--sub); }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border-radius: 999px;
+      padding: 3px 9px;
+      margin-right: 6px;
+      margin-bottom: 8px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .full { grid-column: 1 / -1; }
+    label {
+      display: block;
+      font-size: 12px;
+      color: #374151;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .emphasis-text {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+      color: #111827;
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    .hint {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .tab-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .tab-btn {
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #374151;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      border-color: #60a5fa;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .upload-zone {
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      background: #f9fafb;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .upload-zone:hover { border-color: #93c5fd; background: #eff6ff; }
+    .upload-zone input { display: none; }
+    .thumb {
+      max-width: 100%;
+      max-height: 180px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin-top: 8px;
+    }
+    .analysis-panel {
+      margin-top: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px;
+      background: #fafcff;
+    }
+    .prep-cols {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .prep-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px;
+      background: #fcfcfd;
+    }
+    .prep-head {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #1f2937;
+      font-weight: 700;
+    }
+    .prep-head input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      flex: 0 0 16px;
+    }
+    .prep-card textarea {
+      min-height: 110px;
+    }
+    .switch-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: #374151;
+    }
+    .switch-row input {
+      width: 16px;
+      height: 16px;
+      margin: 3px 0 0;
+      flex: 0 0 16px;
+    }
+    .upload-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .upload-col {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px;
+      background: #fcfcfd;
+    }
+    .upload-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #1f2937;
+    }
+    .file-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      background: #fff;
+    }
+    .file-meta { color: #6b7280; font-size: 12px; }
+    .note-box {
+      margin-top: 8px;
+      border: 1px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f9fafb;
+      font-size: 12px;
+      color: #4b5563;
+    }
+    .note-box ul {
+      margin: 6px 0 0 18px;
+      padding: 0;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .gen-progress {
+      margin-top: 10px;
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .gen-progress.hidden {
+      display: none;
+    }
+    .gen-progress .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      color: #1f2937;
+      margin-bottom: 6px;
+    }
+    .gen-progress .bar {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+    .gen-progress .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      transition: width 0.2s linear;
+    }
+    .generate-result {
+      margin-top: 8px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .generate-result.hidden {
+      display: none;
+    }
+    .generate-result.success {
+      color: #2563eb;
+    }
+    .generate-result.error {
+      color: #dc2626;
+    }
+    .btn {
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn.primary {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn.danger {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+    .btn.small {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+    .status {
+      font-size: 13px;
+      color: #374151;
+    }
+    .error { color: var(--danger); }
+    .llm-config {
+      margin-top: 6px;
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .llm-config h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .preset-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .preset-btn {
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #1e3a8a;
+      border-radius: 999px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .preset-btn.active {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      color: #fff;
+    }
+    .llm-config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .llm-config-grid .full {
+      grid-column: 1 / -1;
+    }
+    .llm-config-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .advanced-config {
+      margin-top: 8px;
+    }
+    .llm-status {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(420px, 1.2fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .advanced-stack {
+      grid-template-columns: 1fr;
+    }
+    .advanced-stack input {
+      width: 100%;
+    }
+    .preview-col {
+      position: sticky;
+      top: 12px;
+    }
+    .hidden { display: none !important; }
+    @media (max-width: 860px) {
+      .grid, .upload-cols, .prep-cols, .page-grid { grid-template-columns: 1fr; }
+      .llm-config-grid { grid-template-columns: 1fr; }
+      .preview-col { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <h1>找工101（beta测试版）</h1>
+    </section>
+
+    <div class="page-grid">
+    <div>
+    <section class="card">
+      <h2>面试输入信息</h2>
+      <div class="grid">
+        <div>
+          <label class="emphasis-text" for="companyName">公司名称 *</label>
+          <input id="companyName" placeholder="请输入公司名称" />
+        </div>
+        <div>
+          <label class="emphasis-text" for="roleName">岗位名称 *</label>
+          <input id="roleName" placeholder="请输入岗位名称（战略分析师 / 产品经理 / 数据分析师）" />
+        </div>
+
+        <div class="full">
+          <label class="emphasis-text">Job Description *</label>
+          <div class="tab-row">
+            <button type="button" class="tab-btn active" data-jd-tab="image">截图</button>
+            <button type="button" class="tab-btn" data-jd-tab="text">纯文本</button>
+          </div>
+          <div id="jdPanelText" class="tab-panel">
+            <textarea id="jobDescription" placeholder="粘贴完整JD原文..." style="min-height: 72px; max-height: 72px; overflow-y: auto;"></textarea>
+          </div>
+          <div id="jdPanelImage" class="tab-panel active">
+            <label class="upload-zone" for="jdImageInput">
+              点击上传 JD 截图（PNG/JPG/WebP）
+              <input id="jdImageInput" type="file" accept="image/*" />
+            </label>
+            <img id="jdImagePreview" class="thumb hidden" alt="JD截图预览" />
+            <div class="hint">截图会随草稿保存在本地浏览器中，用于后续生成二级页面。</div>
+          </div>
+        </div>
+
+        <div class="full">
+          <label class="emphasis-text">想要重点准备的面试方向 *</label>
+          <div class="hint">先勾选要准备的窗口，再在对应文本框细化（每行一条）。</div>
+          <div class="prep-cols">
+            <div class="prep-card">
+              <label class="prep-head" for="prepTechnicalEnabled">
+                <input id="prepTechnicalEnabled" type="checkbox" />
+                行业核心知识扫盲
+              </label>
+              <textarea id="prepTechnicalInput" placeholder="- 关键专业知识点&#10;- 指标口径与方法论&#10;- 常见技术追问"></textarea>
+            </div>
+            <div class="prep-card">
+              <label class="prep-head" for="prepExperienceEnabled">
+                <input id="prepExperienceEnabled" type="checkbox" />
+                既有经历深挖
+              </label>
+              <textarea id="prepExperienceInput" placeholder="- 项目A的难点与结果量化&#10;- 关键决策与取舍&#10;- 失败复盘与改进"></textarea>
+            </div>
+            <div class="prep-card">
+              <label class="prep-head" for="prepBehaviorEnabled">
+                <input id="prepBehaviorEnabled" type="checkbox" />
+                行为面试
+              </label>
+              <textarea id="prepBehaviorInput" placeholder="- 求职动机和岗位匹配&#10;- 抗压场景复盘&#10;- 跨团队冲突处理"></textarea>
+            </div>
+            <div class="prep-card">
+              <label class="prep-head" for="prepCaseEnabled">
+                <input id="prepCaseEnabled" type="checkbox" />
+                情景化案例模拟
+              </label>
+              <textarea id="prepCaseInput" placeholder="- 市场进入策略case&#10;- 增长诊断case&#10;- 经营异常归因case"></textarea>
+            </div>
+          </div>
+          <div class="analysis-panel"></div>
+          <div id="focusAnalysis" class="hidden" aria-hidden="true"></div>
+        </div>
+
+        <div>
+          <label class="emphasis-text" for="targetDate">目标面试日期（可选）</label>
+          <input id="targetDate" type="date" />
+        </div>
+        <div>
+          <label class="emphasis-text" for="intensity">准备强度（建议）</label>
+          <select id="intensity">
+            <option value="standard">标准</option>
+            <option value="fast">快跑</option>
+            <option value="sprint">冲刺</option>
+            <option value="final-sprint">最后冲刺</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>已有学习积累上传（可选）</h2>
+      <div class="note-box">
+        <ul>
+          <li>此处上传的文件只会保存在你的本地浏览器中，不会上传到任何地方，请放心隐私。</li>
+          <li>上传资料是为了帮助 AI 更好理解你当前能力水平，并非必填。</li>
+        </ul>
+      </div>
+      <div class="upload-cols">
+        <div class="upload-col">
+          <div class="upload-title emphasis-text">相关知识积累笔记</div>
+          <label class="upload-zone" for="knowledgeFilesInput">
+            支持格式：DOC/DOCX/PDF/TXT/截图
+            <input id="knowledgeFilesInput" type="file" multiple accept=".doc,.docx,.pdf,.txt,text/plain,application/pdf,image/*" />
+          </label>
+          <div class="hint">建议上传你已有的行业笔记、框架、案例材料。</div>
+          <div id="knowledgeFileList" class="file-list"></div>
+        </div>
+        <div class="upload-col">
+          <div class="upload-title emphasis-text">与该岗位相关的最新版本简历</div>
+          <label class="upload-zone" for="resumeFilesInput">
+            支持格式：DOC/DOCX/PDF/TXT/截图
+            <input id="resumeFilesInput" type="file" multiple accept=".doc,.docx,.pdf,.txt,text/plain,application/pdf,image/*" />
+          </label>
+          <div class="hint">建议上传最新简历版本（可多个版本对比）。</div>
+          <div id="resumeFileList" class="file-list"></div>
+        </div>
+      </div>
+      <div class="hint">单文件建议不超过 2MB；PDF/DOC 在浏览器内主要保存文件名与文本摘要，完整解析需后续接入后端。</div>
+    </section>
+
+    <section class="card">
+      <div class="actions">
+        <button id="generateBtn" class="btn primary">生成并打开找工准备计划</button>
+      </div>
+      <div id="genProgress" class="gen-progress hidden">
+        <div class="row">
+          <span id="genProgressLabel">正在准备...</span>
+          <span id="genProgressEta">预计剩余 --s</span>
+        </div>
+        <div class="bar"><div id="genProgressFill" class="fill"></div></div>
+      </div>
+      <div id="generateResult" class="generate-result hidden"></div>
+    </section>
+    </div>
+
+    <div class="preview-col">
+    <section class="card">
+      <div class="llm-config">
+        <h3>AI模型配置</h3>
+        <div class="preset-row">
+          <button id="presetClaudeBtn" class="preset-btn" type="button">预填 Claude</button>
+          <button id="presetGptBtn" class="preset-btn" type="button">预填 GPT</button>
+          <button id="presetGeminiBtn" class="preset-btn" type="button">预填 Gemini</button>
+          <button id="presetDeepseekBtn" class="preset-btn" type="button">预填 DeepSeek</button>
+          <button id="presetDoubaoBtn" class="preset-btn" type="button">预填 豆包</button>
+        </div>
+        <div class="llm-config-grid">
+          <div class="full">
+            <label for="llmApiKey">API Key（仅保存在本地浏览器）</label>
+            <input id="llmApiKey" type="password" placeholder="请先选择模型，再输入API Key" />
+          </div>
+        </div>
+        <details class="advanced-config">
+          <summary>高级配置（可手动输入 Base URL 与模型版本）</summary>
+          <div class="llm-config-grid advanced-stack" style="margin-top:8px;">
+            <div>
+              <label for="llmEndpoint">Base URL</label>
+              <input id="llmEndpoint" placeholder="例如：https://api.openai.com/v1/chat/completions" />
+            </div>
+            <div>
+              <label for="llmModel">模型版本</label>
+              <input id="llmModel" placeholder="例如：gpt-4o-mini" />
+            </div>
+          </div>
+        </details>
+        <div class="llm-config-actions">
+          <button id="saveLlmConfigBtn" class="btn small" type="button">保存配置</button>
+          <button id="testLlmConfigBtn" class="btn small" type="button">测试连接</button>
+          <span id="llmStatus" class="llm-status">未配置</span>
+        </div>
+      </div>
+    </section>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    const storeKey = "interview_prep_level1_input_v4_clean";
+    const handoffKey = "interview_prep_handoff_v1";
+    const llmConfigStoreKey = "byte_interview_llm_config_v1";
+
+    const companyNameEl = document.getElementById("companyName");
+    const roleNameEl = document.getElementById("roleName");
+    const jobDescriptionEl = document.getElementById("jobDescription");
+    const jdImageInputEl = document.getElementById("jdImageInput");
+    const jdImagePreviewEl = document.getElementById("jdImagePreview");
+    const prepBehaviorEnabledEl = document.getElementById("prepBehaviorEnabled");
+    const prepBehaviorInputEl = document.getElementById("prepBehaviorInput");
+    const prepTechnicalEnabledEl = document.getElementById("prepTechnicalEnabled");
+    const prepTechnicalInputEl = document.getElementById("prepTechnicalInput");
+    const prepExperienceEnabledEl = document.getElementById("prepExperienceEnabled");
+    const prepExperienceInputEl = document.getElementById("prepExperienceInput");
+    const prepCaseEnabledEl = document.getElementById("prepCaseEnabled");
+    const prepCaseInputEl = document.getElementById("prepCaseInput");
+    const targetDateEl = document.getElementById("targetDate");
+    const intensityEl = document.getElementById("intensity");
+    const autoExpandGeneral = true;
+    const focusAnalysisEl = document.getElementById("focusAnalysis");
+    const knowledgeFilesInputEl = document.getElementById("knowledgeFilesInput");
+    const resumeFilesInputEl = document.getElementById("resumeFilesInput");
+    const knowledgeFileListEl = document.getElementById("knowledgeFileList");
+    const resumeFileListEl = document.getElementById("resumeFileList");
+    const llmEndpointEl = document.getElementById("llmEndpoint");
+    const llmModelEl = document.getElementById("llmModel");
+    const llmApiKeyEl = document.getElementById("llmApiKey");
+    const presetClaudeBtn = document.getElementById("presetClaudeBtn");
+    const presetGptBtn = document.getElementById("presetGptBtn");
+    const presetGeminiBtn = document.getElementById("presetGeminiBtn");
+    const presetDeepseekBtn = document.getElementById("presetDeepseekBtn");
+    const presetDoubaoBtn = document.getElementById("presetDoubaoBtn");
+    const saveLlmConfigBtn = document.getElementById("saveLlmConfigBtn");
+    const testLlmConfigBtn = document.getElementById("testLlmConfigBtn");
+    const llmStatusEl = document.getElementById("llmStatus");
+    const generateBtn = document.getElementById("generateBtn");
+    const genProgressEl = document.getElementById("genProgress");
+    const genProgressLabelEl = document.getElementById("genProgressLabel");
+    const genProgressEtaEl = document.getElementById("genProgressEta");
+    const genProgressFillEl = document.getElementById("genProgressFill");
+    const generateResultEl = document.getElementById("generateResult");
+
+    let jdActiveTab = "image";
+    let jdImageDataUrl = "";
+    let knowledgeFiles = [];
+    let resumeFiles = [];
+    const llmPresets = {
+      claude: {
+        endpoint: "https://openrouter.ai/api/v1/chat/completions",
+        model: "anthropic/claude-3.5-sonnet"
+      },
+      gpt: {
+        endpoint: "https://api.openai.com/v1/chat/completions",
+        model: "gpt-4o-mini"
+      },
+      gemini: {
+        endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+        model: "gemini-2.5-pro"
+      },
+      deepseek: {
+        endpoint: "https://api.deepseek.com/chat/completions",
+        model: "deepseek-chat"
+      },
+      doubao: {
+        endpoint: "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+        model: "doubao-1.5-pro-32k-250115"
+      }
+    };
+
+    const GENERAL_RULES = [
+      { pattern: /(behavior|behaviour|行为|软技能|non-technical|沟通|抗压|领导力|团队合作|求职动机)/i, expansion: ["行为面：求职动机与选择逻辑", "行为面：冲突协作与跨团队沟通", "行为面：抗压与优先级管理", "行为面：失败复盘与学习能力"] },
+      { pattern: /(case|案例|商业分析题|估算题|结构化题)/i, expansion: ["Case：市场进入与竞争策略", "Case：增长诊断与归因分析", "Case：商业化与盈利模型", "Case：组织协同与落地推进"] },
+      { pattern: /(基础知识|行业基础|行业知识|行业认知|宏观趋势)/i, expansion: ["行业基础：产业链与关键玩家", "行业基础：业务模型与盈利方式", "行业基础：关键指标与口径", "行业基础：主要趋势与风险"] }
+    ];
+    const SPECIFIC_HINTS = /(行业|市场|渠道|通路|供应链|物流|产品|用户|增长|数据|算法|财务|定价|运营|品类|竞争|战略|政策|合规|商业模式|需求预测|库存|治理|服务商|平台|消费者)/i;
+
+    function uid() {
+      return `f_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function loadDraft() {
+      try {
+        return JSON.parse(localStorage.getItem(storeKey) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function loadSharedLlmConfig() {
+      try {
+        return JSON.parse(localStorage.getItem(llmConfigStoreKey) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveSharedLlmConfig(config) {
+      localStorage.setItem(llmConfigStoreKey, JSON.stringify(config));
+    }
+
+    function normalizeLlmConfig(config) {
+      const next = { ...(config || {}) };
+      let endpoint = String(next.endpoint || "").trim();
+      const model = String(next.model || "").trim();
+      const apiKey = String(next.apiKey || "").trim();
+      if (!endpoint) {
+        return { ...next, endpoint, model, apiKey };
+      }
+      const lower = endpoint.toLowerCase();
+      if (lower.startsWith("http://") && /api\.deepseek\.com|api\.openai\.com|openrouter\.ai|generativelanguage\.googleapis\.com/.test(lower)) {
+        endpoint = `https://${endpoint.slice(7)}`;
+      }
+      if (/^https?:\/\/[^/]+\/?$/i.test(endpoint)) {
+        endpoint = `${endpoint.replace(/\/+$/, "")}/chat/completions`;
+      } else if (/\/v1\/?$/i.test(endpoint)) {
+        endpoint = `${endpoint.replace(/\/+$/, "")}/chat/completions`;
+      }
+      return { ...next, endpoint, model, apiKey };
+    }
+
+    function updateLlmStatus(config, msg) {
+      if (msg) {
+        llmStatusEl.textContent = msg;
+        return;
+      }
+      const ok = config.endpoint && config.model && config.apiKey;
+      llmStatusEl.textContent = ok ? "已配置，可用于AI拆解" : "未配置（将回退规则版）";
+    }
+
+    function updatePresetUI(selectedKey) {
+      const mapping = {
+        claude: presetClaudeBtn,
+        gpt: presetGptBtn,
+        gemini: presetGeminiBtn,
+        deepseek: presetDeepseekBtn,
+        doubao: presetDoubaoBtn
+      };
+      Object.entries(mapping).forEach(([k, btn]) => {
+        btn.classList.toggle("active", k === selectedKey);
+      });
+    }
+
+    function initLlmConfigUI() {
+      const config = normalizeLlmConfig(loadSharedLlmConfig());
+      llmEndpointEl.value = config.endpoint || "";
+      llmModelEl.value = config.model || "";
+      llmApiKeyEl.value = config.apiKey || "";
+      updatePresetUI(config.presetKey || "");
+      updateLlmStatus(config);
+
+      function applyPreset(presetKey) {
+        const p = llmPresets[presetKey];
+        if (!p) return;
+        llmEndpointEl.value = p.endpoint;
+        llmModelEl.value = p.model;
+        updatePresetUI(presetKey);
+        const next = {
+          endpoint: llmEndpointEl.value.trim(),
+          model: llmModelEl.value.trim(),
+          apiKey: llmApiKeyEl.value.trim(),
+          presetKey
+        };
+        const normalized = normalizeLlmConfig(next);
+        llmEndpointEl.value = normalized.endpoint || "";
+        llmModelEl.value = normalized.model || "";
+        llmApiKeyEl.value = normalized.apiKey || "";
+        saveSharedLlmConfig(normalized);
+        updateLlmStatus(normalized, `已选择${presetKey}模型，请输入API Key`);
+      }
+
+      presetClaudeBtn.addEventListener("click", () => applyPreset("claude"));
+      presetGptBtn.addEventListener("click", () => applyPreset("gpt"));
+      presetGeminiBtn.addEventListener("click", () => applyPreset("gemini"));
+      presetDeepseekBtn.addEventListener("click", () => applyPreset("deepseek"));
+      presetDoubaoBtn.addEventListener("click", () => applyPreset("doubao"));
+
+      saveLlmConfigBtn.addEventListener("click", () => {
+        const next = {
+          endpoint: llmEndpointEl.value.trim(),
+          model: llmModelEl.value.trim(),
+          apiKey: llmApiKeyEl.value.trim(),
+          presetKey: loadSharedLlmConfig().presetKey || ""
+        };
+        const normalized = normalizeLlmConfig(next);
+        llmEndpointEl.value = normalized.endpoint || "";
+        llmModelEl.value = normalized.model || "";
+        llmApiKeyEl.value = normalized.apiKey || "";
+        saveSharedLlmConfig(normalized);
+        updateLlmStatus(normalized, "配置已保存");
+      });
+
+      testLlmConfigBtn.addEventListener("click", async () => {
+        const configNowRaw = {
+          endpoint: llmEndpointEl.value.trim(),
+          model: llmModelEl.value.trim(),
+          apiKey: llmApiKeyEl.value.trim(),
+          presetKey: loadSharedLlmConfig().presetKey || ""
+        };
+        const configNow = normalizeLlmConfig(configNowRaw);
+        llmEndpointEl.value = configNow.endpoint || "";
+        llmModelEl.value = configNow.model || "";
+        llmApiKeyEl.value = configNow.apiKey || "";
+        saveSharedLlmConfig(configNow);
+        if (!configNow.endpoint || !configNow.model || !configNow.apiKey) {
+          updateLlmStatus(configNow, "请先选择模型并输入API Key");
+          return;
+        }
+        llmStatusEl.textContent = "测试中...";
+        try {
+          const res = await fetch(configNow.endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${configNow.apiKey}`
+            },
+            body: JSON.stringify({
+              model: configNow.model,
+              temperature: 0,
+              messages: [{ role: "user", content: "回复ok" }]
+            })
+          });
+          if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`HTTP ${res.status} ${errText.slice(0, 120)}`);
+          }
+          llmStatusEl.textContent = "连接成功";
+        } catch (e) {
+          llmStatusEl.textContent = `连接失败：${e.message}`;
+        }
+      });
+    }
+
+    function saveDraftToStore(payload) {
+      localStorage.setItem(storeKey, JSON.stringify(payload));
+    }
+
+    function switchJdTab(tab) {
+      const normalized = tab === "url" ? "text" : tab;
+      jdActiveTab = normalized;
+      document.querySelectorAll("[data-jd-tab]").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-jd-tab") === normalized);
+      });
+      document.getElementById("jdPanelText").classList.toggle("active", normalized === "text");
+      document.getElementById("jdPanelImage").classList.toggle("active", normalized === "image");
+    }
+
+    function stripHtml(html) {
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      return (div.textContent || div.innerText || "").replace(/\s+\n/g, "\n").trim();
+    }
+
+    function getJdContent() {
+      if (jdActiveTab === "text") return { mode: "text", text: jobDescriptionEl.value.trim(), imageDataUrl: "" };
+      return { mode: "image", text: "", imageDataUrl: jdImageDataUrl };
+    }
+
+    function mergeJdText(jd) {
+      const parts = [];
+      if (jd.text) parts.push(jd.text);
+      if (jd.imageDataUrl) parts.push("[JD来源] 截图已上传（见 jdImageDataUrl）");
+      return parts.join("\n\n").trim();
+    }
+
+    function splitLines(text) {
+      return String(text || "")
+        .split("\n")
+        .map((x) => x.replace(/^[-\s\d.]+/, "").trim())
+        .filter(Boolean);
+    }
+
+    function suggestIntensityByTargetDate(targetDate) {
+      const dateStr = String(targetDate || "").trim();
+      if (!dateStr) return "standard";
+      const m = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) return "standard";
+      const target = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const diffDays = Math.ceil((target.getTime() - today.getTime()) / 86400000);
+      if (diffDays > 30) return "standard";
+      if (diffDays >= 15) return "fast";
+      if (diffDays >= 5) return "sprint";
+      return "final-sprint";
+    }
+
+    function collectPrepModules() {
+      const modules = [
+        {
+          key: "technical",
+          title: "行业核心知识扫盲",
+          enabled: prepTechnicalEnabledEl.checked,
+          rawText: prepTechnicalInputEl.value.trim()
+        },
+        {
+          key: "experience",
+          title: "既有经历深挖",
+          enabled: prepExperienceEnabledEl.checked,
+          rawText: prepExperienceInputEl.value.trim()
+        },
+        {
+          key: "behavioral",
+          title: "行为面试",
+          enabled: prepBehaviorEnabledEl.checked,
+          rawText: prepBehaviorInputEl.value.trim()
+        },
+        {
+          key: "case",
+          title: "情景化案例模拟",
+          enabled: prepCaseEnabledEl.checked,
+          rawText: prepCaseInputEl.value.trim()
+        }
+      ];
+      return modules.map((m) => ({ ...m, lines: splitLines(m.rawText) }));
+    }
+
+    function fileKind(file) {
+      const name = file.name.toLowerCase();
+      if (file.type.startsWith("image/")) return "image";
+      if (name.endsWith(".pdf")) return "pdf";
+      if (name.endsWith(".doc") || name.endsWith(".docx")) return "doc";
+      if (name.endsWith(".txt") || file.type === "text/plain") return "text";
+      return "other";
+    }
+
+    async function readFileAsData(file) {
+      const kind = fileKind(file);
+      if (kind === "text") {
+        const text = await file.text();
+        return { kind, textPreview: text.slice(0, 8000), dataUrl: "" };
+      }
+      if (kind === "image") {
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ""));
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        return { kind, textPreview: `[图片] ${file.name}`, dataUrl };
+      }
+      return {
+        kind,
+        textPreview: `[${kind.toUpperCase()}] ${file.name}（浏览器内暂存元数据，完整解析需后端）`,
+        dataUrl: ""
+      };
+    }
+
+    async function addFilesToTarget(fileList, targetType) {
+      const targetArray = targetType === "resume" ? resumeFiles : knowledgeFiles;
+      for (const file of fileList) {
+        if (file.size > 2 * 1024 * 1024) {
+          setStatus(`文件过大已跳过：${file.name}（建议≤2MB）`, true);
+          continue;
+        }
+        const parsed = await readFileAsData(file);
+        targetArray.push({
+          id: uid(),
+          name: file.name,
+          size: file.size,
+          kind: parsed.kind,
+          textPreview: parsed.textPreview,
+          dataUrl: parsed.dataUrl
+        });
+      }
+      renderAllFileLists();
+      renderPreview(collectPayload());
+    }
+
+    function renderFileList(containerEl, files, removeAttr) {
+      if (!files.length) {
+        containerEl.innerHTML = `<div class="hint">尚未上传</div>`;
+        return;
+      }
+      containerEl.innerHTML = files.map((f) => `
+        <div class="file-item">
+          <div>
+            <div>${f.name}</div>
+            <div class="file-meta">${f.kind.toUpperCase()} · ${Math.round(f.size / 1024)} KB</div>
+          </div>
+          <button type="button" class="btn danger small" ${removeAttr}="${f.id}">移除</button>
+        </div>
+      `).join("");
+    }
+
+    function bindRemoveButtons() {
+      knowledgeFileListEl.querySelectorAll("[data-remove-knowledge]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-remove-knowledge");
+          knowledgeFiles = knowledgeFiles.filter((x) => x.id !== id);
+          renderAllFileLists();
+          renderPreview(collectPayload());
+        });
+      });
+      resumeFileListEl.querySelectorAll("[data-remove-resume]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-remove-resume");
+          resumeFiles = resumeFiles.filter((x) => x.id !== id);
+          renderAllFileLists();
+          renderPreview(collectPayload());
+        });
+      });
+    }
+
+    function renderAllFileLists() {
+      renderFileList(knowledgeFileListEl, knowledgeFiles, "data-remove-knowledge");
+      renderFileList(resumeFileListEl, resumeFiles, "data-remove-resume");
+      bindRemoveButtons();
+    }
+
+    function analyzeFocusLine(line) {
+      const text = String(line || "").trim();
+      if (!text) return null;
+      const matched = GENERAL_RULES.find((r) => r.pattern.test(text.toLowerCase()));
+      const shortAndBroad = text.length <= 10 && !SPECIFIC_HINTS.test(text);
+      const hasSpecificHints = SPECIFIC_HINTS.test(text);
+      if (matched || shortAndBroad || !hasSpecificHints) {
+        return {
+          original: text,
+          type: "general",
+          suggestedChildren: (matched && matched.expansion) || [
+            `${text}：核心概念与边界`,
+            `${text}：常见面试题与回答框架`,
+            `${text}：1-2个可讲案例`
+          ]
+        };
+      }
+      return { original: text, type: "specific", suggestedChildren: [] };
+    }
+
+    function analyzeFocusList(list) {
+      return list.map((x) => analyzeFocusLine(x)).filter(Boolean);
+    }
+
+    function buildFinalFocusList(rawList, analysis, autoExpandGeneral) {
+      if (!autoExpandGeneral) return rawList;
+      const finalList = [];
+      analysis.forEach((item) => {
+        if (item.type === "specific") finalList.push(item.original);
+        else item.suggestedChildren.forEach((s) => finalList.push(s));
+      });
+      return finalList;
+    }
+
+    function buildFocusItemsFromModules(prepModules, autoExpand) {
+      const items = [];
+      (prepModules || []).filter((m) => m.enabled).forEach((module) => {
+        const baseLines = module.lines.length ? module.lines : [module.title];
+        baseLines.forEach((line) => {
+          const analyzed = analyzeFocusLine(line);
+          if (!analyzed) return;
+          if (autoExpand && analyzed.type === "general") {
+            analyzed.suggestedChildren.forEach((child) => {
+              const focus = String(child || "").trim();
+              if (!focus) return;
+              items.push({
+                moduleKey: module.key,
+                moduleTitle: module.title,
+                rawLine: line,
+                focus
+              });
+            });
+            return;
+          }
+          const focus = String(analyzed.original || line || "").trim();
+          if (!focus) return;
+          items.push({
+            moduleKey: module.key,
+            moduleTitle: module.title,
+            rawLine: line,
+            focus
+          });
+        });
+      });
+      return items;
+    }
+
+    function extractMaterialDigest(payload) {
+      const files = [
+        ...(payload.learningMaterials?.knowledgeNotes || []),
+        ...(payload.learningMaterials?.resumeFiles || [])
+      ];
+      return files.slice(0, 6).map((f) => {
+        const preview = String(f.textPreview || "").replace(/\s+/g, " ").slice(0, 220);
+        return `${f.name} | ${preview || "无文本预览"}`;
+      });
+    }
+
+    function extractResumeDigest(payload) {
+      const files = payload?.learningMaterials?.resumeFiles || [];
+      return files.slice(0, 6).map((f) => {
+        const preview = String(f.textPreview || "").replace(/\s+/g, " ").slice(0, 260);
+        return `${f.name} | ${preview || "无文本预览"}`;
+      });
+    }
+
+    function extractKnowledgeDigest(payload) {
+      const files = payload?.learningMaterials?.knowledgeNotes || [];
+      return files.slice(0, 6).map((f) => {
+        const preview = String(f.textPreview || "").replace(/\s+/g, " ").slice(0, 260);
+        return `${f.name} | ${preview || "无文本预览"}`;
+      });
+    }
+
+    function normalizeAiTopic(raw, fallbackFocus) {
+      const toList = (value, fallback) => {
+        if (Array.isArray(value)) return value.map((x) => String(x || "").trim()).filter(Boolean);
+        if (typeof value === "string" && value.trim()) return [value.trim()];
+        return fallback;
+      };
+      const focus = String(raw?.focus || fallbackFocus || "").trim();
+      const moduleKey = String(raw?.module_key || raw?.moduleKey || "").trim();
+      const moduleTitle = String(raw?.module_title || raw?.moduleTitle || "").trim();
+      const beginner = toList(raw?.beginner, [
+        `方向定义：${focus} 主要解决什么问题。`,
+        "输入输出：先明确输入信息，再定义输出结果。",
+        "评价标准：通过哪些指标判断准备是否有效。"
+      ]);
+      const textbook = {
+        core: toList(raw?.core, ["先明确该方向在岗位中的业务价值。"]),
+        framework: toList(raw?.framework, ["定义问题 -> 构建框架 -> 给出可执行方案。"]),
+        formula: String(raw?.formula || "高质量回答 = 结构完整度 * 业务相关度 * 可执行性"),
+        caseDemo: toList(raw?.caseDemo, [`围绕“${focus}”准备1个真实场景案例。`]),
+        pitfalls: toList(raw?.pitfalls, ["只讲概念，不讲落地与验证。"]),
+        script: String(raw?.script || "我会先定义问题边界，再给框架与行动方案，最后补风险与验证。")
+      };
+      const knowledge = toList(raw?.knowledge, [
+        `澄清该方向的核心概念与边界：${focus}`,
+        "识别该方向在目标岗位中的高频题型与追问点。"
+      ]);
+      const action = toList(raw?.action, [
+        "整理1页知识卡片（概念、方法、案例、风险）。",
+        "完成2道模拟题并复盘回答结构。"
+      ]);
+      const interview = String(raw?.interview || "先定义问题，再给框架，再引用证据，最后补风险与落地。");
+      const industry = raw?.industry && typeof raw.industry === "object" ? raw.industry : {};
+      const aiIndustry = {
+        industryName: String(raw?.industry_name || industry?.industryName || industry?.industry_name || "").trim(),
+        keywords: toList(raw?.industry_keywords || industry?.keywords || industry?.industry_keywords, []).slice(0, 12),
+        valueChain: toList(raw?.industry_value_chain || industry?.valueChain || industry?.value_chain, []),
+        coreConcepts: toList(raw?.industry_core_concepts || industry?.coreConcepts || industry?.core_concepts, []),
+        competition: toList(raw?.industry_competition || industry?.competition, []),
+        trends: toList(raw?.industry_trends || industry?.trends, []),
+        extra: toList(raw?.industry_extra || industry?.extra, [])
+      };
+      return { moduleKey, moduleTitle, focus, beginner, textbook, knowledge, action, interview, aiIndustry };
+    }
+
+    async function callPlanningLLM(config, payload) {
+      const focusItems = Array.isArray(payload.prepFocusItemsFinal) ? payload.prepFocusItemsFinal.slice(0, 16) : [];
+      const materialDigest = extractMaterialDigest(payload);
+      const resumeDigest = extractResumeDigest(payload);
+      const knowledgeDigest = extractKnowledgeDigest(payload);
+      const technicalInput = ((payload.prepModules || []).find((m) => m.key === "technical")?.rawText || "").slice(0, 3000);
+      const experienceInput = ((payload.prepModules || []).find((m) => m.key === "experience")?.rawText || "").slice(0, 3000);
+      const behavioralInput = ((payload.prepModules || []).find((m) => m.key === "behavioral")?.rawText || "").slice(0, 3000);
+      const caseInput = ((payload.prepModules || []).find((m) => m.key === "case")?.rawText || "").slice(0, 3000);
+      const systemPrompt = [
+        "你是面试学习教练，请为每个准备方向生成结构化学习拆解。",
+        "输出必须是严格JSON，格式：",
+        "{\"topics\":[{\"module_key\":\"technical|experience|behavioral|case\",\"module_title\":\"...\",\"focus\":\"...\",\"beginner\":[\"...\"],\"core\":[\"...\"],\"framework\":[\"...\"],\"formula\":\"...\",\"caseDemo\":[\"...\"],\"pitfalls\":[\"...\"],\"script\":\"...\",\"knowledge\":[\"...\"],\"action\":[\"...\"],\"interview\":\"...\",\"industry_name\":\"...\",\"industry_keywords\":[\"...\"],\"industry_value_chain\":[\"...\"],\"industry_core_concepts\":[\"...\"],\"industry_competition\":[\"...\"],\"industry_trends\":[\"...\"],\"industry_extra\":[\"...\"]}]}",
+        "要求：",
+        "1) topics数量要和输入focus数量一致；focus字段必须与输入原文完全一致；module_key必须与输入一致。",
+        "2) 第一层优先级必须遵循：technical > experience > behavioral > case（仅用于你思考任务重要性）。",
+        "3) 第二层按模块输入逻辑：",
+        "  - technical：必须基于JD提取关键词锁定行业，按多来源公开信息视角完成行业拆解。",
+        "  - experience：依据 JD + 简历，识别重叠能力与gap，输出重点复习经历任务。",
+        "  - behavioral：依据 JD + 简历，提炼岗位关注特质并映射到可讲经历任务。",
+        "  - case：依据 JD，提炼高发业务场景与高概率案例模拟题任务。",
+        "4) technical模块必须输出industry_*字段，并按以下结构生成：",
+        "  - industry_value_chain：1A【行业价值链】",
+        "  - industry_core_concepts：1B【行业核心概念】",
+        "  - industry_competition：1C【行业竞争格局】（要包含与目标公司竞争关系企业）",
+        "  - industry_trends：1D【行业重要趋势】（渠道变革/消费者行为/数字化等）",
+        "  - industry_extra：1E【其他值得关注维度】（如无可返回空数组）",
+        "5) 不要将“小白概念入门/核心认知/实操框架/场景示例/常见误区”独立分节输出；应融入1A~1E每条知识点中（可在同一条中包含场景示例与常见误区）。",
+        "6) 面向候选人直接学习，不要写“先分析/再拆解/建议你去研究”等任务指令语气。每条尽量写成可直接背诵的知识句：定义 + 指标/公式 + 含义 + 场景 + 误区。",
+        "7) 行业核心概念中，必须至少给出3个核心指标，并写明每个指标的计算公式与业务含义。",
+        "8) 每个数组控制在3-6条，中文输出。"
+      ].join("\n");
+      const userPrompt = JSON.stringify({
+        companyName: payload.companyName,
+        roleName: payload.roleName,
+        targetDate: payload.targetDate,
+        intensity: payload.intensity,
+        focusItems,
+        jobDescription: String(payload.jobDescription || "").slice(0, 8000),
+        prepModules: (payload.prepModules || []).map((m) => ({
+          key: m.key,
+          title: m.title,
+          enabled: m.enabled,
+          lines: (m.lines || []).slice(0, 8),
+          rawText: String(m.rawText || "").slice(0, 1200)
+        })),
+        moduleInputs: {
+          technicalInput,
+          experienceInput,
+          behavioralInput,
+          caseInput,
+          resumeDigest,
+          knowledgeDigest
+        },
+        learningMaterialsDigest: materialDigest
+      });
+      const compactUserPrompt = JSON.stringify({
+        companyName: payload.companyName,
+        roleName: payload.roleName,
+        targetDate: payload.targetDate,
+        intensity: payload.intensity,
+        focusItems: focusItems.slice(0, 10),
+        jobDescription: String(payload.jobDescription || "").slice(0, 5000),
+        moduleInputs: {
+          technicalInput: technicalInput.slice(0, 900),
+          experienceInput: experienceInput.slice(0, 900),
+          behavioralInput: behavioralInput.slice(0, 900),
+          caseInput: caseInput.slice(0, 900),
+          resumeDigest: resumeDigest.slice(0, 3),
+          knowledgeDigest: knowledgeDigest.slice(0, 3)
+        }
+      });
+      const fetchWithTimeout = async (url, options, timeoutMs) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          return await fetch(url, { ...options, signal: controller.signal });
+        } finally {
+          clearTimeout(timer);
+        }
+      };
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const endpointLower = String(config.endpoint || "").toLowerCase();
+      const plainJsonFirst = /deepseek|ark\.cn-beijing|volces|doubao/.test(endpointLower);
+
+      const requestOnce = async (useResponseFormat, promptPayload) => {
+        const body = {
+          model: config.model,
+          temperature: 0.2,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: promptPayload }
+          ]
+        };
+        if (useResponseFormat) {
+          body.response_format = { type: "json_object" };
+        }
+        let lastErr = null;
+        for (let attempt = 1; attempt <= 2; attempt++) {
+          let res;
+          try {
+            res = await fetchWithTimeout(config.endpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${config.apiKey}`
+              },
+              body: JSON.stringify(body)
+            }, 45000);
+          } catch (err) {
+            if (err && err.name === "AbortError") {
+              lastErr = new Error("AI请求超时（45s）");
+            } else {
+              lastErr = err;
+            }
+            if (attempt < 2) {
+              await sleep(1200);
+              continue;
+            }
+            throw lastErr;
+          }
+          if (!res.ok) {
+            const errText = await res.text();
+            const transient = res.status === 429 || res.status >= 500;
+            lastErr = new Error(`HTTP ${res.status} ${errText.slice(0, 200)}`);
+            if (transient && attempt < 2) {
+              await sleep(1200);
+              continue;
+            }
+            throw lastErr;
+          }
+          return res.json();
+        }
+        throw lastErr || new Error("LLM请求失败");
+      };
+
+      let data;
+      try {
+        data = await requestOnce(!plainJsonFirst, userPrompt);
+      } catch (err) {
+        data = await requestOnce(false, compactUserPrompt);
+      }
+      const content = data?.choices?.[0]?.message?.content || "";
+      const start = content.indexOf("{");
+      const end = content.lastIndexOf("}");
+      if (start === -1 || end === -1) throw new Error("模型未返回JSON对象");
+      const parsed = JSON.parse(content.slice(start, end + 1));
+      const topics = Array.isArray(parsed?.topics) ? parsed.topics : [];
+      return topics;
+    }
+
+    async function enrichPayloadWithAi(payload) {
+      const config = normalizeLlmConfig(loadSharedLlmConfig());
+      const hasConfig = !!(config.endpoint && config.model && config.apiKey);
+      if (!hasConfig) {
+        return {
+          ...payload,
+          aiGeneration: {
+            enabled: false,
+            reason: "missing_llm_config"
+          }
+        };
+      }
+      const aiTopicsRaw = await callPlanningLLM(config, payload);
+      const focusItemSet = new Set((payload.prepFocusItemsFinal || []).map((x) => `${x.moduleKey}::${String(x.focus || "").trim()}`));
+      const aiTopics = aiTopicsRaw
+        .map((t) => normalizeAiTopic(t, t?.focus))
+        .filter((t) => {
+          const key = `${t.moduleKey || ""}::${t.focus || ""}`;
+          return focusItemSet.has(key) || (payload.prepFocusListFinal || []).includes(t.focus);
+        });
+      return {
+        ...payload,
+        aiGeneration: {
+          enabled: true,
+          reason: "",
+          generatedAt: new Date().toISOString(),
+          model: config.model
+        },
+        aiTopicBlueprints: aiTopics
+      };
+    }
+
+    async function enrichPayloadWithAiDeadline(payload, timeoutMs = 100000) {
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error(`AI拆解超时（>${Math.round(timeoutMs / 1000)}s）`)), timeoutMs);
+      });
+      return Promise.race([enrichPayloadWithAi(payload), timeoutPromise]);
+    }
+
+    function collectPayload() {
+      const prepModules = collectPrepModules();
+      const rawFocusList = prepModules
+        .filter((m) => m.enabled)
+        .flatMap((m) => (m.lines.length ? m.lines : [m.title]));
+      const focusItemsFinal = buildFocusItemsFromModules(prepModules, autoExpandGeneral);
+      const focusList = focusItemsFinal.map((x) => x.focus);
+      const focusAnalysis = analyzeFocusList(focusList);
+      const finalFocusList = focusList.length ? focusList : buildFinalFocusList(rawFocusList, analyzeFocusList(rawFocusList), autoExpandGeneral);
+      const jd = getJdContent();
+      const prepFocusRaw = prepModules
+        .filter((m) => m.enabled)
+        .map((m) => `${m.title}\n${m.rawText || "(未填写细化内容)"}`)
+        .join("\n\n");
+      return {
+        companyName: companyNameEl.value.trim(),
+        roleName: roleNameEl.value.trim(),
+        jobDescription: mergeJdText(jd),
+        jdInput: {
+          activeTab: jdActiveTab,
+          text: jobDescriptionEl.value.trim(),
+          imageDataUrl: jdImageDataUrl
+        },
+        prepFocusRaw,
+        prepModules,
+        prepFocusList: focusList,
+        prepFocusAnalysis: focusAnalysis,
+        prepFocusListFinal: finalFocusList,
+        prepFocusItemsFinal: focusItemsFinal,
+        autoExpandGeneral,
+        learningMaterials: {
+          knowledgeNotes: knowledgeFiles,
+          resumeFiles
+        },
+        targetDate: targetDateEl.value,
+        intensity: intensityEl.value,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    function validate(payload) {
+      if (!payload.companyName) return "请填写公司名称";
+      if (!payload.roleName) return "请填写岗位名称";
+      const jd = payload.jdInput || {};
+      const hasJd = !!(jd.text || jd.imageDataUrl);
+      if (!hasJd) return "请至少提供一种 JD 输入（纯文本 / 截图）";
+      const enabledCount = (payload.prepModules || []).filter((m) => m.enabled).length;
+      if (!enabledCount) return "请至少勾选一个面试准备方向";
+      return "";
+    }
+
+    function renderPreview(payload) {
+      const previewEl = document.getElementById("preview");
+      if (!previewEl) return;
+      const jd = payload.jdInput || {};
+      const knowledgeCount = payload.learningMaterials?.knowledgeNotes?.length || 0;
+      const resumeCount = payload.learningMaterials?.resumeFiles?.length || 0;
+      const lines = [
+        `公司：${payload.companyName || "-"}`,
+        `岗位：${payload.roleName || "-"}`,
+        `准备强度：${payload.intensity || "-"}`,
+        `面试日期：${payload.targetDate || "-"}`,
+        "",
+        "已勾选方向：",
+        ...((payload.prepModules || []).filter((m) => m.enabled).map((m) => `- ${m.title}`) || ["- （未勾选）"]),
+        "",
+        "用于生成二级页面的方向：",
+        ...(payload.prepFocusList.length ? payload.prepFocusList.map((x) => `- ${x}`) : ["- （待填写）"]),
+        "",
+        `JD输入方式：${jd.activeTab || "-"}`,
+        `JD文本字数：${payload.jobDescription ? payload.jobDescription.length : 0}`,
+        `JD截图：${jd.imageDataUrl ? "已上传" : "无"}`,
+        `知识积累笔记文件：${knowledgeCount} 个`,
+        `相关简历文件：${resumeCount} 个`
+      ];
+      previewEl.textContent = lines.join("\n");
+    }
+
+    function setStatus(msg, isError) {
+      if (isError && msg) {
+        console.warn(msg);
+      }
+    }
+
+    function formatLlmError(err) {
+      const raw = String(err?.message || err || "unknown error").replace(/\s+/g, " ").trim();
+      return raw.length > 200 ? `${raw.slice(0, 200)}...` : raw;
+    }
+
+    function startGenerationProgress(expectedMs) {
+      const startTs = Date.now();
+      genProgressEl.classList.remove("hidden");
+      genProgressLabelEl.textContent = "正在调用AI拆解方向...";
+      genProgressEtaEl.textContent = `预计剩余 ${Math.ceil(expectedMs / 1000)}s`;
+      genProgressFillEl.style.width = "3%";
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - startTs;
+        const ratio = Math.min(0.95, elapsed / expectedMs);
+        const remainingSec = Math.max(0, Math.ceil((expectedMs - elapsed) / 1000));
+        genProgressFillEl.style.width = `${Math.max(3, Math.round(ratio * 100))}%`;
+        genProgressEtaEl.textContent = `预计剩余 ${remainingSec}s`;
+      }, 200);
+      return {
+        complete(labelText) {
+          clearInterval(timer);
+          genProgressLabelEl.textContent = labelText || "处理完成，正在打开计划页...";
+          genProgressEtaEl.textContent = "预计剩余 0s";
+          genProgressFillEl.style.width = "100%";
+        },
+        fail(labelText) {
+          clearInterval(timer);
+          genProgressLabelEl.textContent = labelText || "AI超时，正在回退到规则版...";
+          genProgressEtaEl.textContent = "预计剩余 0s";
+          genProgressFillEl.style.width = "100%";
+        },
+        hide(delayMs = 1000) {
+          setTimeout(() => {
+            genProgressEl.classList.add("hidden");
+            genProgressFillEl.style.width = "0%";
+          }, delayMs);
+        }
+      };
+    }
+
+    function bindInputs() {
+      [companyNameEl, roleNameEl, jobDescriptionEl, targetDateEl, intensityEl]
+        .forEach((el) => {
+          el.addEventListener("input", () => renderPreview(collectPayload()));
+          el.addEventListener("change", () => renderPreview(collectPayload()));
+        });
+      [
+        prepBehaviorEnabledEl, prepBehaviorInputEl,
+        prepTechnicalEnabledEl, prepTechnicalInputEl,
+        prepExperienceEnabledEl, prepExperienceInputEl,
+        prepCaseEnabledEl, prepCaseInputEl
+      ].forEach((el) => {
+        el.addEventListener("input", () => renderPreview(collectPayload()));
+        el.addEventListener("change", () => renderPreview(collectPayload()));
+      });
+
+      document.querySelectorAll("[data-jd-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          switchJdTab(btn.getAttribute("data-jd-tab"));
+          renderPreview(collectPayload());
+        });
+      });
+
+      targetDateEl.addEventListener("change", () => {
+        intensityEl.value = suggestIntensityByTargetDate(targetDateEl.value);
+        renderPreview(collectPayload());
+      });
+
+      jdImageInputEl.addEventListener("change", async () => {
+        const file = jdImageInputEl.files?.[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+          setStatus("JD截图建议不超过 2MB", true);
+          return;
+        }
+        jdImageDataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ""));
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        jdImagePreviewEl.src = jdImageDataUrl;
+        jdImagePreviewEl.classList.remove("hidden");
+        renderPreview(collectPayload());
+      });
+
+      knowledgeFilesInputEl.addEventListener("change", async () => {
+        if (knowledgeFilesInputEl.files?.length) {
+          await addFilesToTarget(Array.from(knowledgeFilesInputEl.files), "knowledge");
+          knowledgeFilesInputEl.value = "";
+        }
+      });
+
+      resumeFilesInputEl.addEventListener("change", async () => {
+        if (resumeFilesInputEl.files?.length) {
+          await addFilesToTarget(Array.from(resumeFilesInputEl.files), "resume");
+          resumeFilesInputEl.value = "";
+        }
+      });
+    }
+
+    function bootstrap() {
+      // Clean-mode bootstrap: do not preload prior draft/material uploads.
+      switchJdTab("image");
+      jdImageDataUrl = "";
+      jdImagePreviewEl.classList.add("hidden");
+      jdImagePreviewEl.removeAttribute("src");
+      knowledgeFiles = [];
+      resumeFiles = [];
+      prepTechnicalEnabledEl.checked = false;
+      prepExperienceEnabledEl.checked = false;
+      prepBehaviorEnabledEl.checked = false;
+      prepCaseEnabledEl.checked = false;
+      intensityEl.value = "standard";
+      renderAllFileLists();
+      renderPreview(collectPayload());
+      setStatus("", false);
+    }
+
+    generateBtn.addEventListener("click", async () => {
+      const payload = collectPayload();
+      const err = validate(payload);
+      if (err) {
+        alert(err);
+        return;
+      }
+      const target = "interview_prep_level2.html";
+      generateBtn.disabled = true;
+      generateResultEl.classList.add("hidden");
+      generateResultEl.classList.remove("success", "error");
+      const prevText = generateBtn.textContent;
+      generateBtn.textContent = "正在分析，请稍候...";
+      const expectedMs = 100000;
+      const progress = startGenerationProgress(expectedMs);
+      let finalPayload = payload;
+      let llmOk = false;
+      try {
+        finalPayload = await enrichPayloadWithAiDeadline(payload, expectedMs);
+        const usedAi = !!finalPayload?.aiGeneration?.enabled;
+        const hasBlueprints = Array.isArray(finalPayload?.aiTopicBlueprints) && finalPayload.aiTopicBlueprints.length > 0;
+        if (!usedAi || !hasBlueprints) {
+          throw new Error("LLM未返回有效拆解结果");
+        }
+        llmOk = true;
+        llmStatusEl.textContent = "AI拆解完成";
+        progress.complete("AI拆解完成，正在打开计划页...");
+      } catch (e) {
+        console.error(e);
+        const reason = formatLlmError(e);
+        progress.fail("LLM调用失败");
+        generateResultEl.textContent = `LLM调用失败：${reason}`;
+        generateResultEl.classList.remove("hidden");
+        generateResultEl.classList.remove("success");
+        generateResultEl.classList.add("error");
+        llmStatusEl.textContent = `调用失败：${reason}`;
+        generateBtn.disabled = false;
+        generateBtn.textContent = prevText;
+        progress.hide(500);
+        return;
+      }
+      try {
+        saveDraftToStore(finalPayload);
+        localStorage.setItem(handoffKey, JSON.stringify(finalPayload));
+      } catch (e) {
+        console.error(e);
+        alert("本地缓存写入失败（可能是浏览器存储已满）。将继续打开二级页面，但可能无法完整带入本次输入。");
+      }
+      const finalUrl = `${target}?from=level1&t=${Date.now()}`;
+      if (llmOk) {
+        generateResultEl.textContent = "LLM调用成功";
+        generateResultEl.classList.remove("hidden");
+        generateResultEl.classList.remove("error");
+        generateResultEl.classList.add("success");
+        window.open(finalUrl, "_blank");
+      }
+      generateBtn.disabled = false;
+      generateBtn.textContent = prevText;
+      progress.hide(1200);
+    });
+
+    bindInputs();
+    initLlmConfigUI();
+    bootstrap();
+  </script>
+</body>
+</html>
