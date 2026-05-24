@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✅ 找工计划 - 面试岗位</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f6f8fb;
+      color: #111827;
+    }
+    .loader {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #4b5563;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader">正在加载找工计划...</div>
+  <script>
+    (async function bootstrapLevel2() {
+      const sourceFile = atob("aW50ZXJ2aWV3X2d1aWRlLmh0bWw=");
+      try {
+        const res = await fetch(sourceFile, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const html = await res.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (err) {
+        const msg = err && err.message ? err.message : "unknown";
+        document.body.innerHTML = `<div class="loader">加载失败：${msg}</div>`;
+      }
+    })();
+  </script>
+</body>
+</html>
