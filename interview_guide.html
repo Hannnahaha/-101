@@ -1,0 +1,4410 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✅ 找工计划 - 面试岗位</title>
+  <style>
+    :root {
+      --bg: #f3f1f8;
+      --card: rgba(255, 255, 255, 0.72);
+      --text: #201a31;
+      --sub: #5e5873;
+      --border: #ded8ea;
+      --primary: #6f5a96;
+      --primary-soft: #ece7f7;
+      --primary-deep: #4f3d73;
+      --hover-soft: #f4f0fb;
+      --ok: #15803d;
+      --muted-bg: #f3f4f6;
+      --muted-text: #9ca3af;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #f8f6fd 0%, var(--bg) 55%, #efebf7 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 136px 18px 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(71, 49, 102, 0.08);
+    }
+    h1, h2, h3 { margin: 0 0 10px; line-height: 1.35; }
+    h1 { font-size: 35px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
+    p { margin: 8px 0; color: var(--sub); }
+    ul { margin: 8px 0 0 20px; color: var(--sub); }
+    li { margin: 5px 0; }
+    .top-fixed-shell {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 120;
+      background: transparent;
+      padding: 12px 0;
+    }
+    .top-fixed-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+    .hero {
+      display: block;
+      gap: 12px;
+      border: 1px solid #b6a7d6;
+      border-radius: 12px;
+      background: rgba(243, 238, 251, 0.8);
+      box-shadow: none;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      border-radius: 999px;
+      padding: 3px 9px;
+      margin-right: 7px;
+      margin-bottom: 6px;
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .date-chip {
+      font-size: 11px;
+      border-radius: 999px;
+      border: 1px solid #cfbfd8;
+      background: #f2ecf8;
+      color: var(--primary-deep);
+      padding: 1px 7px;
+      white-space: nowrap;
+    }
+    .pill {
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 1px 7px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .p0 { color: #7c2d12; background: #ffedd5; }
+    .p1 { color: #4f3d73; background: #e8def7; }
+    .p2 { color: #166534; background: #dcfce7; }
+    .layout {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 12px;
+      max-height: calc(100vh - 30px);
+      overflow: auto;
+    }
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .topic-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      transition: border-color 0.15s ease;
+    }
+    .topic-link:hover { border-color: #bda9da; background: var(--hover-soft); }
+    .topic-link.active {
+      border-color: #a68ccb;
+      background: #f3edfb;
+    }
+    .meta {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .timeline-meta {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #5b4a79;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .timeline-visual {
+      margin-top: 6px;
+      border: 1px solid #ddd2ee;
+      border-radius: 8px;
+      background: #faf7ff;
+      padding: 8px;
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+      cursor: default;
+    }
+    .timeline-visual:hover {
+      box-shadow: 0 2px 8px rgba(109, 69, 157, 0.2);
+      transform: translateY(-1px);
+    }
+    .timeline-chip-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .timeline-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #4f3d73;
+      background: #efe8fb;
+      border: 1px solid #dacdf1;
+      white-space: nowrap;
+    }
+    .timeline-task-badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7c2d12;
+      background: #ffedd5;
+      border: 1px solid #fed7aa;
+      white-space: nowrap;
+    }
+    .timeline-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #ebe5f7;
+    }
+    .timeline-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%);
+      transition: width 0.25s ease;
+    }
+    .timeline-foot {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #6b5b8b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .timeline-foot .timeline-progress-count {
+      font-weight: 700;
+      color: #5b21b6;
+    }
+    .topic-content .url-box {
+      background: #f7f4fb;
+      border: 1px dashed #d5cde6;
+      color: #374151;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      word-break: break-all;
+    }
+    .track-list {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+    }
+    .track-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin: 7px 0;
+      background: #fff;
+    }
+    .track-item input[type="checkbox"] {
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+    }
+    .track-item.done {
+      background: var(--muted-bg);
+      color: var(--muted-text);
+      border-color: #e5e7eb;
+    }
+    .track-item.done .track-text {
+      text-decoration: line-through;
+    }
+    .textbook-block {
+      margin-top: 12px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 12px;
+    }
+    .textbook-section {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ebe3f4;
+      background: #fcfaff;
+      border-radius: 8px;
+    }
+    .textbook-section h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: var(--primary-deep);
+    }
+    .case-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .case-section-header h4 {
+      margin: 0;
+    }
+    .refresh-case-btn {
+      font-size: 18px;
+      font-weight: 800;
+      padding: 12px 20px;
+      min-height: 48px;
+      border: 1px solid #4c1d95;
+      background: #5b21b6;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(91, 33, 182, 0.35);
+      white-space: nowrap;
+    }
+    .refresh-case-btn:hover {
+      background: #4c1d95;
+      transform: translateY(-1px);
+    }
+    .refresh-case-btn:active {
+      background: #3b136f;
+      transform: translateY(0);
+    }
+    .formula {
+      background: #f8f5fc;
+      border: 1px dashed #d5cde6;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: #374151;
+      margin: 6px 0;
+    }
+    .script-box {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: #065f46;
+      margin-top: 8px;
+    }
+    .module-building-placeholder {
+      margin-top: 10px;
+      border: 1px solid #d1d5db;
+      background: #f3f4f6;
+      color: #6b7280;
+      border-radius: 10px;
+      padding: 24px 16px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+    .experience-overlap-line {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .experience-top-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .experience-top-module {
+      border: 1px solid #d9cdea;
+      background: #f3edfb;
+      color: #4f3d73;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    .experience-top-module strong {
+      font-size: 12px;
+      color: #5b4a79;
+    }
+    .experience-top-list {
+      margin: 4px 0 0 16px;
+      padding: 0;
+    }
+    .experience-top-list li {
+      margin: 2px 0;
+      color: #4f3d73;
+    }
+    .stats {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #374151;
+      padding: 8px 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+    .hero-title-wrap {
+      flex: 1;
+      min-width: 0;
+      text-align: center;
+    }
+    .hero-sub {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: #334155;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .export-warning {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #92400e;
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 6px;
+      padding: 5px 8px;
+      display: inline-block;
+    }
+    .hero-actions-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+    .step-title {
+      font-size: 12px;
+      color: #374151;
+      margin: 6px 0 6px;
+      font-weight: 600;
+    }
+    .selected-model {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #1e3a8a;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+    .llm-config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .llm-config label {
+      font-size: 12px;
+      color: #4b5563;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .llm-config input {
+      width: 100%;
+      font-size: 12px;
+      padding: 7px 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .llm-config input[readonly] {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+    .llm-config .full { grid-column: 1 / -1; }
+    .llm-config-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .floating-export {
+      padding: 0;
+      background: transparent;
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+    .export-panel-title {
+      display: none;
+    }
+    .export-actions {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+    .export-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .export-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .export-icon.word { color: #185abd; }
+    .export-icon.excel { color: #107c41; }
+    .export-btn {
+      color: #fff !important;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 11px 18px;
+      border-width: 2px;
+      box-shadow: 0 6px 16px rgba(70, 52, 95, 0.25);
+      border-radius: 12px;
+      letter-spacing: 0.2px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .word-btn {
+      background: #2f6fdb !important;
+      border-color: #2f6fdb !important;
+    }
+    .excel-btn {
+      background: #2e8b57 !important;
+      border-color: #2e8b57 !important;
+    }
+    .export-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(70, 52, 95, 0.34);
+    }
+    .preset-row {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .preset-btn {
+      font-size: 12px;
+      border: 1px solid #d9d0e8;
+      background: #ffffff;
+      color: #374151;
+      border-radius: 6px;
+      padding: 5px 9px;
+      cursor: pointer;
+    }
+    .preset-btn:hover {
+      border-color: #bba6d7;
+      color: var(--primary-deep);
+      background: #f2ecf8;
+    }
+    .preset-btn.active {
+      border-color: #a88ecb;
+      background: #e8def7;
+      color: var(--primary-deep);
+      font-weight: 600;
+    }
+    .advanced-config {
+      margin-top: 8px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 6px 8px;
+      background: #fcfcfd;
+    }
+    .advanced-config summary {
+      cursor: pointer;
+      color: #4b5563;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+    }
+    .preset-note {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .btn {
+      font-size: 12px;
+      border: 1px solid #cfbfd8;
+      background: #f2ecf8;
+      color: var(--primary-deep);
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .llm-status {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .knowledge-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 10px;
+      margin: 8px 0;
+      padding: 8px;
+      border: 1px solid #eef2f7;
+      border-radius: 8px;
+      background: #ffffff;
+    }
+    .knowledge-main {
+      font-size: 14px;
+      color: #334155;
+    }
+    .knowledge-main ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .knowledge-main li {
+      margin: 0;
+    }
+    .knowledge-extra {
+      margin-top: 6px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: #ecfeff;
+      border: 1px solid #bae6fd;
+      color: #0c4a6e;
+      font-size: 12px;
+    }
+    .knowledge-extra .extra-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .knowledge-extra table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      background: #fff;
+      color: #0f172a;
+    }
+    .knowledge-extra th,
+    .knowledge-extra td {
+      border: 1px solid #cbd5e1;
+      padding: 4px 6px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 12px;
+    }
+    .knowledge-extra th {
+      background: #eff6ff;
+      font-weight: 600;
+    }
+    .knowledge-extra ul {
+      margin: 6px 0 0 18px;
+      color: #0c4a6e;
+    }
+    .knowledge-chat {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px;
+    }
+    .knowledge-chat textarea {
+      width: 100%;
+      min-height: 62px;
+      font-size: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 6px;
+      resize: vertical;
+      background: #fff;
+    }
+    .knowledge-chat .chat-actions {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .knowledge-chat .answer {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #1f2937;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 6px;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow: auto;
+    }
+    .knowledge-chat .answer.empty {
+      color: #9ca3af;
+    }
+    .qa-history {
+      margin-top: 8px;
+      border-top: 1px dashed #d1d5db;
+      padding-top: 8px;
+    }
+    .qa-history-title {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .qa-history-item {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 6px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: #1f2937;
+    }
+    .qa-history-q {
+      margin-bottom: 4px;
+      color: #1e3a8a;
+    }
+    .qa-history-a {
+      white-space: pre-wrap;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+    .qa-history-k {
+      border-top: 1px dashed #e5e7eb;
+      margin-top: 4px;
+      padding-top: 4px;
+      color: #0c4a6e;
+    }
+    .qa-history-time {
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 11px;
+    }
+    .industry-block {
+      margin-top: 10px;
+      border: 1px solid #d9cdea;
+      border-radius: 8px;
+      background: #f7f3fc;
+      padding: 8px;
+    }
+    .industry-block h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      color: var(--primary-deep);
+    }
+    .industry-tags {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #334155;
+      background: #f2ecf8;
+      border: 1px solid #cfbfd8;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .industry-tag-line + .industry-tag-line {
+      margin-top: 2px;
+    }
+    .industry-tip {
+      margin: 8px 0 4px;
+      border: 1px solid #cdbfe3;
+      border-radius: 8px;
+      background: #efe8f8;
+      color: #4b3f63;
+      padding: 6px 10px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .knowledge-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .knowledge-bullet-check {
+      margin-top: 2px;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .knowledge-bullet-text {
+      flex: 1 1 auto;
+    }
+    .knowledge-bullet-main {
+      color: inherit;
+    }
+    .ai-reason-line {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #1e3a8a;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 3px 6px;
+      display: inline-block;
+    }
+    .knowledge-bullet.done .knowledge-bullet-text {
+      color: #9f97b4;
+      text-decoration: line-through;
+    }
+    .footer {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .hidden { display: none !important; }
+    .imported-summary {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #374151;
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 10px;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 980px) {
+      .hero {
+        gap: 8px;
+      }
+      .wrap { padding-top: 154px; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; }
+      .knowledge-row { grid-template-columns: 1fr; }
+      .llm-config-grid { grid-template-columns: 1fr; }
+      .hero-actions-text {
+        font-size: 13px;
+      }
+      .floating-export {
+        width: auto;
+      }
+      .export-actions {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-fixed-shell">
+    <div class="top-fixed-inner">
+      <section class="card hero">
+      <div class="hero-title-wrap">
+        <h1 id="heroTitle">找工101（beta测试版）</h1>
+      </div>
+      <div class="hero-actions">
+        <span class="hero-actions-text">导出AI对话学习笔记</span>
+        <div class="floating-export">
+          <div class="export-panel-title">导出AI对话学习笔记</div>
+          <div class="export-actions">
+            <button id="exportWordBtn" class="btn export-btn word-btn"><span class="export-label"><span class="export-icon word">W</span>Word格式</span></button>
+            <button id="exportExcelBtn" class="btn export-btn excel-btn"><span class="export-label"><span class="export-icon excel">X</span>Excel格式</span></button>
+          </div>
+        </div>
+        <span id="llmStatus" class="llm-status">检查配置中...</span>
+        <div class="export-warning">该页面不具备缓存能力，每次使用后请及时导出学习笔记，否则下次刷新时将丢失</div>
+      </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <section class="layout">
+      <aside class="card sidebar">
+        <div id="topicList" class="topic-list"></div>
+      </aside>
+
+      <main id="topicDetail" class="card topic-content"></main>
+    </section>
+
+  </div>
+
+  <script>
+    if (window.location.pathname.endsWith(`/${atob("aW50ZXJ2aWV3X2d1aWRlLmh0bWw=")}`)) {
+      const target = `interview_prep_level2.html${window.location.search || ""}${window.location.hash || ""}`;
+      window.location.replace(target);
+    }
+
+    let topics = [
+      {
+        id: "topic-mode-design",
+        title: "模式设计与发展规划（JD-1）",
+        priority: "P0",
+        day: "Day1",
+        why: "这是岗位最核心的战略题，几乎必问。",
+        knowledge: [
+          "模式库：直邮、半托管、海外仓、本地履约、混合网络。",
+          "决策框架：成本、时效、体验、合规风险四维平衡。",
+          "分品类逻辑：轻小件、重货、高退货品的差异化模式。",
+          "动态切换：从试点到扩量的阈值和切换机制。"
+        ],
+        action: [
+          "做一页“模式决策表”：市场 x 品类 x 模式 x 预期成本/时效。",
+          "准备1个‘从全托管到半托管’的结构化回答。"
+        ],
+        interview: "回答时先给框架，再给参数，再给试点推进路径。"
+      },
+      {
+        id: "topic-cross-border-network",
+        title: "跨境物流网络拆解（头程-清关-尾程-逆向）",
+        priority: "P0",
+        day: "Day1",
+        why: "你目前薄弱点在这里，补齐后会显著提升可信度。",
+        knowledge: [
+          "头程：空/海/铁的时效成本特征与旺季运力风险。",
+          "清关：申报准确性、查验率、税费不确定性管理。",
+          "尾程：多承运商路由、区域时效分层、签收稳定性。",
+          "逆向：退货分层处置（二售/销毁/返修）与成本止损。"
+        ],
+        action: [
+          "画出一张跨境履约全链路图，并标注每段KPI。",
+          "整理3个常见异常：清关延迟、尾程爆仓、退货过高。"
+        ],
+        interview: "把问题定位到链路段，而不是泛泛说‘物流不好’。"
+      },
+      {
+        id: "topic-cost-model",
+        title: "履约成本与订单贡献模型",
+        priority: "P0",
+        day: "Day1",
+        why: "战略岗需要‘算得明白’，不是只会讲增长。",
+        knowledge: [
+          "成本结构：头程+仓储+操作+尾程+逆向+损耗。",
+          "订单贡献：分国家、品类、模式做单位经济核算。",
+          "边际变化：单量上升后成本曲线不一定线性下降。",
+          "时效升级的代价：服务水平与毛利之间的边界。"
+        ],
+        action: [
+          "给出1个国家样例，做‘快方案 vs 稳方案’成本对比。",
+          "准备‘为什么GMV涨但利润恶化’的解释模板。"
+        ],
+        interview: "先报拆解口径，再讲结果，不跳步骤。"
+      },
+      {
+        id: "topic-operating-kpi-tree",
+        title: "履约经营指标树（JD-3）",
+        priority: "P0",
+        day: "Day2",
+        why: "面试会看你是否能从经营角度驱动落地。",
+        knowledge: [
+          "北极星建议：履约成本/订单 + 准时妥投率。",
+          "二级指标：OTD、签收时效、缺货率、库存周转天数。",
+          "三级指标：承运商SLA、仓作业时长、清关通过率。",
+          "预警机制：按国家/模式/承运商设阈值触发。"
+        ],
+        action: [
+          "输出1张‘北极星-二级-三级’指标树图。",
+          "给每个指标写1句‘异常时我会怎么查’。"
+        ],
+        interview: "强调‘指标用于决策’，不是只做看板。"
+      },
+      {
+        id: "topic-root-cause-method",
+        title: "经营异常根因分析方法",
+        priority: "P0",
+        day: "Day2",
+        why: "你现有材料偏运营分析，可在这里建立差异化。",
+        knowledge: [
+          "切片维度：国家、渠道、履约模式、承运商、仓。",
+          "贡献度拆分：找主因，不被平均数误导。",
+          "链路回溯：问题发生段位与责任归属。",
+          "策略闭环：短期止损 + 中期优化 + 长期机制。"
+        ],
+        action: [
+          "练1题：时效变好但利润变差如何拆。",
+          "练1题：投诉上升但OTD稳定如何解释。"
+        ],
+        interview: "用‘先确认现象-再分层-后归因-给方案’四步法。"
+      },
+      {
+        id: "topic-interview-templates",
+        title: "高频面试题模板（3大类）",
+        priority: "P0",
+        day: "Day2",
+        why: "3天后可能面试，必须快速转化为口头表达。",
+        knowledge: [
+          "题型1：某国履约成本上升，如何调整网络。",
+          "题型2：时效投诉激增，如何定位链路问题。",
+          "题型3：如何设计商家激励与服务商治理。"
+        ],
+        action: [
+          "每题准备60-90秒结构化话术。",
+          "每题至少含1个指标、1个机制、1个风险点。"
+        ],
+        interview: "回答保持同一结构，增强稳定性和专业感。"
+      },
+      {
+        id: "topic-merchant-incentive",
+        title: "商家激励策略设计（JD-4）",
+        priority: "P0",
+        day: "Day3",
+        why: "JD明确写了商家激励，这是命中率极高的考点。",
+        knowledge: [
+          "分层激励：按履约能力和合规能力分层。",
+          "激励工具：佣金、流量、履约补贴、资源位。",
+          "惩罚工具：扣分、降权、罚款、退出机制。",
+          "防刷机制：避免指标被策略性做高。"
+        ],
+        action: [
+          "设计一个‘四象限商家管理策略表’。",
+          "给出激励与约束的平衡原则。"
+        ],
+        interview: "强调目标是引导行为，不是单纯发补贴。"
+      },
+      {
+        id: "topic-3pl-governance",
+        title: "服务商治理（3PL/SLA/KPI）",
+        priority: "P0",
+        day: "Day3",
+        why: "这是‘战略分析师’与普通运营的能力分水岭。",
+        knowledge: [
+          "准入机制：资质、覆盖、峰值吞吐、历史稳定性。",
+          "评分机制：时效、妥投、丢损、投诉、逆向效率。",
+          "奖惩机制：运量倾斜、价格调整、退出机制。",
+          "应急机制：爆仓切流、灾备线路、黑天鹅预案。"
+        ],
+        action: [
+          "做一页‘3PL季度评分卡模板’。",
+          "准备‘单一承运商依赖风险’应对方案。"
+        ],
+        interview: "体现你能治理生态，而非只盯内部执行。"
+      },
+      {
+        id: "topic-compliance-policy",
+        title: "政策合规到策略映射（关税/税务/清关）",
+        priority: "P0",
+        day: "Day3",
+        why: "你已有政策素材，但还需转成策略语言。",
+        knowledge: [
+          "政策变化如何影响模式选择和履约成本。",
+          "平台如何通过规则把合规要求前置到商家端。",
+          "高风险品类/国家的差异化治理策略。",
+          "合规与增长的平衡：不做短期套利。"
+        ],
+        action: [
+          "把既有T86/9810认知，改写成‘平台策略动作’。",
+          "准备1个‘政策突变48小时响应方案’。"
+        ],
+        interview: "少讲法规条文，多讲业务决策影响。"
+      },
+      {
+        id: "topic-industry-research",
+        title: "行业调研与趋势研判（JD-2）",
+        priority: "P1",
+        day: "Day4",
+        why: "用于提升视野和深度，但优先级低于前3天。",
+        knowledge: [
+          "竞品维度：模式、时效承诺、卖家策略、服务政策。",
+          "趋势维度：本地化履约、合规穿透、体验升级。",
+          "输出模板：机会点-约束-打法-验证路径。"
+        ],
+        action: [
+          "至少完成1个市场对标（如美国或欧洲）。"
+        ],
+        interview: "把行业洞察落回‘我们怎么做’。"
+      },
+      {
+        id: "topic-country-scenario",
+        title: "国家级策略推演（场景题）",
+        priority: "P1",
+        day: "Day4",
+        why: "用来应对case面。",
+        knowledge: [
+          "输入：市场环境、关税、物流时效、品类结构。",
+          "输出：网络方案、指标目标、资源要求、风险预案。"
+        ],
+        action: [
+          "做1个‘北美市场’推演，含阶段目标。"
+        ],
+        interview: "明确阶段：试点期、验证期、扩量期。"
+      },
+      {
+        id: "topic-migration-story",
+        title: "经验迁移表达（把既有经历讲成供应链能力）",
+        priority: "P2",
+        day: "Day5",
+        why: "提高叙事完整度，形成个人差异化。",
+        knowledge: [
+          "从‘增长漏斗’迁移到‘履约经营漏斗’。",
+          "从‘运营动作’升级到‘机制设计与治理’。",
+          "把过去案例重写成供应链视角。"
+        ],
+        action: [
+          "打磨2段‘我的方法论’表达（每段45秒）。"
+        ],
+        interview: "框架先行，案例跟上，数字收尾。"
+      },
+      {
+        id: "topic-final-checklist",
+        title: "面试前最终检查清单",
+        priority: "P2",
+        day: "Day5",
+        why: "保证上场稳定，不遗漏高频点。",
+        knowledge: [
+          "必会：模式决策、成本模型、指标树、治理机制。",
+          "必备：3道高频题模板 + 1个国家case + 1段迁移故事。",
+          "必防：只讲增长，不讲履约与治理。"
+        ],
+        action: [
+          "模拟2轮问答（压力追问版）。",
+          "准备1页速记卡片，面试前30分钟复盘。"
+        ],
+        interview: "稳定比炫技更重要。"
+      }
+    ];
+
+    const checklistStoreKey = "byte_interview_learning_checklist_v2_clean";
+    const llmConfigStoreKey = "byte_interview_llm_config_v1";
+    const qaStoreKey = "byte_interview_qa_store_v2_clean";
+    const qaArchiveStoreKey = "byte_interview_qa_archive_v1";
+    const caseQuestionsStoreKey = "byte_interview_case_questions_v1";
+    const level1HandoffKey = "interview_prep_handoff_v1";
+    const topicListEl = document.getElementById("topicList");
+    const topicDetailEl = document.getElementById("topicDetail");
+    const progressSummaryEl = document.getElementById("progressSummary");
+    const heroTitleEl = document.getElementById("heroTitle");
+    const exportWordBtn = document.getElementById("exportWordBtn");
+    const exportExcelBtn = document.getElementById("exportExcelBtn");
+    const llmStatusEl = document.getElementById("llmStatus");
+    const defaultTopics = JSON.parse(JSON.stringify(topics));
+    let currentLevel1Payload = null;
+    let dynamicCaseQuestions = [];
+
+    function safeSlug(text, idx) {
+      const base = String(text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+      return base ? `topic-custom-${base}` : `topic-custom-${idx + 1}`;
+    }
+
+    function splitToLines(text) {
+      return String(text || "")
+        .split(/\n|。|；|;|！|!|\?|？/)
+        .map((x) => x.trim())
+        .filter((x) => x.length >= 6);
+    }
+
+    function tokenizeFocus(text) {
+      return String(text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, " ")
+        .split(/\s+/)
+        .filter((x) => x && x.length >= 2);
+    }
+
+    function collectMaterialNames(payload) {
+      const lm = payload?.learningMaterials || {};
+      const notes = Array.isArray(lm.knowledgeNotes) ? lm.knowledgeNotes : [];
+      const resumes = Array.isArray(lm.resumeFiles) ? lm.resumeFiles : [];
+      return [...notes, ...resumes].map((f) => f?.name).filter(Boolean);
+    }
+
+    function extractContextFromJD(payload, focus) {
+      const jdText = String(payload?.jobDescription || "");
+      const lines = splitToLines(jdText);
+      if (!lines.length) return [];
+      const tokens = tokenizeFocus(focus);
+      const behaviorMode = /(behavior|behaviour|行为|软技能|沟通|抗压|领导力|协作|动机)/i.test(focus);
+      const behaviorRegex = /(behavior|behaviour|行为|沟通|抗压|领导力|协作|动机|价值观|冲突|复盘|表达)/i;
+
+      const scored = lines.map((line) => {
+        const lower = line.toLowerCase();
+        let score = 0;
+        tokens.forEach((t) => {
+          if (lower.includes(t)) score += 2;
+        });
+        if (behaviorMode && behaviorRegex.test(line)) score += 2;
+        if (/负责|需要|能力|经验|优先|熟悉|理解|分析|推动/.test(line)) score += 1;
+        return { line, score };
+      });
+      return scored
+        .filter((x) => x.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
+        .map((x) => x.line);
+    }
+
+    function priorityByIndex(i) {
+      if (i < 3) return "P0";
+      if (i < 6) return "P1";
+      return "P2";
+    }
+
+    function parseDateLocal(dateStr) {
+      if (!dateStr) return null;
+      const match = String(dateStr).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return null;
+      const y = Number(match[1]);
+      const m = Number(match[2]) - 1;
+      const d = Number(match[3]);
+      return new Date(y, m, d);
+    }
+
+    function computePrepDays(targetDate) {
+      const target = parseDateLocal(targetDate);
+      if (!target || Number.isNaN(target.getTime())) return 5;
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const diffMs = target.getTime() - today.getTime();
+      const diffDays = Math.ceil(diffMs / 86400000);
+      return Math.max(1, diffDays);
+    }
+
+    function buildCountdownLabels(prepDays) {
+      return Array.from({ length: prepDays }, (_, i) => `D-${prepDays - i}`);
+    }
+
+    function dayByIndex(index, totalTopics, labels) {
+      if (!labels.length) return "D-1";
+      if (totalTopics <= 1) return labels[0];
+      const bucket = Math.floor((index * labels.length) / totalTopics);
+      return labels[Math.min(labels.length - 1, Math.max(0, bucket))];
+    }
+
+    function categoryOrderScore(category) {
+      const order = {
+        technical: 0,
+        crm: 0,
+        case: 1,
+        experience: 2,
+        general: 2,
+        behavioral: 3
+      };
+      return Object.prototype.hasOwnProperty.call(order, category) ? order[category] : 9;
+    }
+
+    function moduleOrderScore(moduleKey) {
+      const order = {
+        technical: 0,
+        case: 1,
+        experience: 2,
+        behavioral: 3
+      };
+      return Object.prototype.hasOwnProperty.call(order, moduleKey) ? order[moduleKey] : 9;
+    }
+
+    function moduleLabel(moduleKey) {
+      const map = {
+        technical: "行业核心知识扫盲",
+        experience: "既有经历深挖",
+        behavioral: "行为面试",
+        case: "情景化案例模拟"
+      };
+      return map[moduleKey] || "其他";
+    }
+
+    function isIndustryCoreModule(topic) {
+      return normalizeModuleKey(topic) === "technical";
+    }
+
+    function sectionLabel(sectionKey) {
+      const map = {
+        beginner: "小白概念入门",
+        core: "核心认知",
+        framework: "实操框架",
+        caseDemo: "场景示例",
+        pitfalls: "常见误区",
+        industry_1A: "1A 行业价值链",
+        industry_1B: "1B 行业核心概念",
+        industry_1C: "1C 行业竞争格局",
+        industry_1D: "1D 行业重要趋势",
+        industry_1DA: "1DA 职能核心知识",
+        industry_1E: "1E 其他关键维度"
+      };
+      return map[sectionKey] || sectionKey;
+    }
+
+    function normalizeModuleKey(topic) {
+      const mk = String(topic?.moduleKey || "").trim();
+      if (["technical", "experience", "behavioral", "case"].includes(mk)) return mk;
+      const cat = topic?.category || inferFocusCategory(`${topic?.title || ""} ${topic?.why || ""}`);
+      if (cat === "experience") return "experience";
+      if (cat === "behavioral") return "behavioral";
+      if (cat === "case") return "case";
+      return "technical";
+    }
+
+    function formatDateNode(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatMonthDayCn(dateObj) {
+      if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return "";
+      return `${dateObj.getMonth() + 1}月${String(dateObj.getDate()).padStart(2, "0")}日`;
+    }
+
+    function addDays(baseDate, days) {
+      const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate());
+      d.setDate(d.getDate() + days);
+      return d;
+    }
+
+    function getBehavioralQuestions() {
+      return [
+        "请讲述一个你跨团队协作推进项目落地的案例，你如何协调分歧并推动结果达成？",
+        "请分享一次你在高压场景下完成关键任务的经历，你当时如何管理压力与优先级？",
+        "你目前遇到过最难的项目是什么？你如何拆解问题、推进执行并复盘？",
+        "请举例说明一次你与关键干系人意见不一致时，你如何沟通并达成共识？",
+        "请讲一个你经历失败或结果不及预期的案例，你从中学到了什么，并如何改进？"
+      ];
+    }
+
+    function countDoneBySection(topicId, sectionKey, total, checklist) {
+      let done = 0;
+      for (let i = 0; i < total; i += 1) {
+        if (checklist[checklistKey(topicId, sectionKey, i)]) done += 1;
+      }
+      return done;
+    }
+
+    function computeTopicTaskStats(topic, checklist) {
+      const moduleKey = normalizeModuleKey(topic);
+      if (moduleKey === "technical") {
+        const sections = buildIndustrySections(topic);
+        let total = 0;
+        let done = 0;
+        sections.forEach((block) => {
+          const items = Array.isArray(block?.items) ? block.items : [];
+          total += items.length;
+          done += countDoneBySection(topic.id, String(block?.sectionKey || ""), items.length, checklist);
+        });
+        return { total, done, pending: Math.max(0, total - done) };
+      }
+      if (moduleKey === "experience") {
+        const bullets = buildDirection2BulletPoints(topic);
+        const onlyMismatch = bullets.length === 1 && /偏差过大|暂无相关建议/.test(String(bullets[0] || ""));
+        const total = onlyMismatch ? 0 : bullets.length;
+        const done = onlyMismatch ? 0 : countDoneBySection(topic.id, "experience_bullets", bullets.length, checklist);
+        return { total, done, pending: Math.max(0, total - done) };
+      }
+      if (moduleKey === "case") {
+        const questions = (Array.isArray(dynamicCaseQuestions) && dynamicCaseQuestions.length >= 5)
+          ? dynamicCaseQuestions.slice(0, 5)
+          : fallbackCaseQuestionsFromKeywords(currentLevel1Payload || {});
+        const total = questions.length;
+        const done = countDoneBySection(topic.id, "case_questions", total, checklist);
+        return { total, done, pending: Math.max(0, total - done) };
+      }
+      if (moduleKey === "behavioral") {
+        const total = getBehavioralQuestions().length;
+        const done = countDoneBySection(topic.id, "behavioral_questions", total, checklist);
+        return { total, done, pending: Math.max(0, total - done) };
+      }
+      const fallback = topicChecklistStats(topic);
+      return { total: fallback.total, done: fallback.done, pending: Math.max(0, fallback.total - fallback.done) };
+    }
+
+    function normalizeFocusKey(text) {
+      return String(text || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+    }
+
+    function buildAiBlueprintMap(payload) {
+      const list = Array.isArray(payload?.aiTopicBlueprints) ? payload.aiTopicBlueprints : [];
+      const map = new Map();
+      list.forEach((item) => {
+        const focusKey = normalizeFocusKey(item?.focus);
+        const moduleKey = String(item?.moduleKey || item?.module_key || "").trim();
+        if (!focusKey) return;
+        if (moduleKey) {
+          map.set(`${moduleKey}::${focusKey}`, item);
+        }
+        map.set(focusKey, item);
+      });
+      return map;
+    }
+
+    function inferFocusCategory(focus) {
+      const text = String(focus || "");
+      if (/(behavior|behaviour|行为|软技能|求职动机|抗压|领导力|协作|冲突)/i.test(text)) return "behavioral";
+      if (/(crm|会员|私域|生命周期|留存|分层运营|触达)/i.test(text)) return "crm";
+      if (/(technical|技术|算法|数据|架构|系统|模型|sql|python|统计|实验)/i.test(text)) return "technical";
+      if (/(经历|项目|star|简历|深挖|复盘)/i.test(text)) return "experience";
+      if (/(case|情景|案例|估算|市场进入|策略模拟|商业分析题)/i.test(text)) return "case";
+      return "general";
+    }
+
+    function buildTopicByCategory(category, focus, jdHints, materialNames) {
+      const materialHint = materialNames.length
+        ? `结合资料（如：${materialNames.slice(0, 2).join("、")}）形成可讲案例。`
+        : "补充1个可量化案例，避免空泛表述。";
+
+      if (category === "behavioral") {
+        return {
+          knowledge: [
+            `行为面主题：${focus}`,
+            "拆成四类：动机匹配、协作冲突、抗压优先级、失败复盘。",
+            "每类准备1个STAR故事并量化结果（效率、成本、时效、满意度等）。",
+            "准备追问链：为什么这样做、替代方案、复盘后如何优化。",
+            ...jdHints.map((x) => `JD对应行为能力要求：${x}`)
+          ].slice(0, 7),
+          action: [
+            "输出4个STAR故事卡片（每张60-90秒）。",
+            "每个故事补3个追问答案（取舍/难点/复盘）。",
+            materialHint
+          ],
+          interview: "行为面回答顺序：结论先行 -> STAR展开 -> 结果量化 -> 复盘提升。"
+        };
+      }
+
+      if (category === "crm") {
+        return {
+          knowledge: [
+            `CRM专题：${focus}`,
+            "明确CRM在业务中的作用：拉新、促活、留存、复购、LTV提升。",
+            "梳理关键机制：用户分层、触达策略、权益设计、频控与治理。",
+            "定义核心指标：留存率、复购率、活跃度、ARPU、触达转化率。",
+            ...jdHints.map((x) => `JD中的业务场景线索：${x}`)
+          ].slice(0, 7),
+          action: [
+            "画出CRM闭环图：分层 -> 触达 -> 转化 -> 复盘。",
+            "准备1个CRM优化案例，说明指标前后变化。",
+            materialHint
+          ],
+          interview: "CRM题回答顺序：业务目标 -> 用户分层 -> 运营机制 -> 指标闭环 -> 风险与治理。"
+        };
+      }
+
+      if (category === "technical") {
+        return {
+          knowledge: [
+            `Technical专题：${focus}`,
+            "明确概念边界、关键输入输出、依赖系统与约束条件。",
+            "准备方法框架：原理 -> 实施步骤 -> 监控指标 -> 风险预案。",
+            "准备高频追问：为何选该方案、替代方案、成本与性能取舍。",
+            ...jdHints.map((x) => `JD技术要求映射：${x}`)
+          ].slice(0, 7),
+          action: [
+            "整理1页技术口述卡（问题定义、方案、指标、风险）。",
+            "完成2道技术追问题，重点讲取舍逻辑。",
+            materialHint
+          ],
+          interview: "Technical回答顺序：定义问题 -> 给方案 -> 讲取舍 -> 用指标验证。"
+        };
+      }
+
+      if (category === "experience") {
+        return {
+          knowledge: [
+            `经历深挖专题：${focus}`,
+            "选择1-2段最相关经历，确保问题背景与岗位JD可映射。",
+            "拆解贡献：你负责什么、怎么推动、结果如何量化。",
+            "准备复盘：做错了什么、学到什么、下一次怎么更好。",
+            ...jdHints.map((x) => `JD能力映射证据：${x}`)
+          ].slice(0, 7),
+          action: [
+            "把1段项目经历改写为STAR+数据版（不超过90秒）。",
+            "针对该经历预演3轮深挖追问。",
+            materialHint
+          ],
+          interview: "经历题回答顺序：背景目标 -> 个人动作 -> 结果数据 -> 反思复用。"
+        };
+      }
+
+      if (category === "case") {
+        return {
+          knowledge: [
+            `案例题专题：${focus}`,
+            "先澄清问题：目标、范围、约束、成功标准。",
+            "构建分析框架：现状诊断 -> 杠杆点 -> 方案设计 -> 验证计划。",
+            "准备量化思路：核心假设、估算口径、优先级排序逻辑。",
+            ...jdHints.map((x) => `JD案例线索：${x}`)
+          ].slice(0, 7),
+          action: [
+            "完成1道case白板练习，先列结构再填细节。",
+            "准备1份30-60-90天落地方案模板。",
+            materialHint
+          ],
+          interview: "案例题回答顺序：澄清问题 -> 搭框架 -> 给方案 -> 讲验证与落地。"
+        };
+      }
+
+      return {
+        knowledge: [
+          `方向定义与边界：${focus}`,
+          "识别该方向在目标岗位中的高频题型与追问点。",
+          "形成可口述的结构化回答模板（60-90秒）。",
+          ...jdHints.map((x) => `来自JD的关键信息：${x}`)
+        ].slice(0, 7),
+        action: [
+          "整理1页知识卡片（概念、方法、案例、风险）。",
+          "完成2道模拟题并复盘回答结构。",
+          materialHint
+        ],
+        interview: "先定义问题，再给框架，再引用JD证据，最后补案例与风险。"
+      };
+    }
+
+    function buildTopicsFromHandoff(payload) {
+      const structuredList = Array.isArray(payload.prepFocusItemsFinal) && payload.prepFocusItemsFinal.length
+        ? payload.prepFocusItemsFinal
+            .map((x, idx) => ({
+              focus: String(x?.focus || "").trim(),
+              moduleKey: String(x?.moduleKey || "").trim(),
+              moduleTitle: String(x?.moduleTitle || "").trim(),
+              idx
+            }))
+            .filter((x) => x.focus)
+        : [];
+      const fallbackList = Array.isArray(payload.prepFocusListFinal) && payload.prepFocusListFinal.length
+        ? payload.prepFocusListFinal.filter(Boolean).map((focus, idx) => ({ focus, moduleKey: "", moduleTitle: "", idx }))
+        : (Array.isArray(payload.prepFocusList) ? payload.prepFocusList.filter(Boolean).map((focus, idx) => ({ focus, moduleKey: "", moduleTitle: "", idx })) : []);
+      const list = structuredList.length ? structuredList : fallbackList;
+      if (!list.length) return [];
+      const prepDays = computePrepDays(payload?.targetDate);
+      const countdownLabels = buildCountdownLabels(prepDays);
+      const materialNames = collectMaterialNames(payload);
+      const aiBlueprintMap = buildAiBlueprintMap(payload);
+      const prepared = list.map((item) => {
+        const focus = item.focus;
+        const jdHints = extractContextFromJD(payload, focus);
+        const category = item.moduleKey || inferFocusCategory(focus);
+        const focusKey = normalizeFocusKey(focus);
+        const aiBlueprint = aiBlueprintMap.get(`${item.moduleKey}::${focusKey}`) || aiBlueprintMap.get(focusKey) || null;
+        return { focus, idx: item.idx, jdHints, category, aiBlueprint, moduleKey: item.moduleKey, moduleTitle: item.moduleTitle };
+      }).sort((a, b) => {
+        const moduleScoreA = moduleOrderScore(a.moduleKey);
+        const moduleScoreB = moduleOrderScore(b.moduleKey);
+        if (moduleScoreA !== moduleScoreB) return moduleScoreA - moduleScoreB;
+        const scoreA = categoryOrderScore(a.category);
+        const scoreB = categoryOrderScore(b.category);
+        if (scoreA !== scoreB) return scoreA - scoreB;
+        return a.idx - b.idx;
+      });
+      const normalizeToModule = (item) => {
+        const mk = String(item.moduleKey || "").trim();
+        if (["technical", "experience", "behavioral", "case"].includes(mk)) return mk;
+        if (item.category === "experience") return "experience";
+        if (item.category === "behavioral") return "behavioral";
+        if (item.category === "case") return "case";
+        return "technical";
+      };
+      const unique = (arr) => {
+        const out = [];
+        (arr || []).forEach((x) => {
+          const text = String(x || "").trim();
+          if (!text) return;
+          if (out.includes(text)) return;
+          out.push(text);
+        });
+        return out;
+      };
+      const enriched = prepared.map((item) => {
+        const fallback = buildTopicByCategory(item.category, item.focus, item.jdHints, materialNames);
+        const generated = item.aiBlueprint
+          ? {
+              knowledge: Array.isArray(item.aiBlueprint.knowledge) && item.aiBlueprint.knowledge.length
+                ? item.aiBlueprint.knowledge
+                : fallback.knowledge,
+              action: Array.isArray(item.aiBlueprint.action) && item.aiBlueprint.action.length
+                ? item.aiBlueprint.action
+                : fallback.action,
+              interview: String(item.aiBlueprint.interview || "").trim() || fallback.interview
+            }
+          : fallback;
+        return { ...item, normalizedModule: normalizeToModule(item), generated };
+      });
+
+      const moduleDefs = [
+        { key: "technical", title: "方向1：行业核心知识扫盲" },
+        { key: "case", title: "方向2：情景化案例模拟" },
+        { key: "experience", title: "方向3：既有经历深挖" },
+        { key: "behavioral", title: "方向4：行为面试" }
+      ];
+
+      return moduleDefs.map((def, idx) => {
+        const items = enriched.filter((x) => x.normalizedModule === def.key);
+        const sourceHints = unique(items.flatMap((x) => x.jdHints || [])).slice(0, 20);
+        const focusLines = unique(items.map((x) => x.focus)).slice(0, 6);
+        const knowledge = unique(items.flatMap((x) => x.generated?.knowledge || []));
+        const action = unique(items.flatMap((x) => x.generated?.action || []));
+        const interview = unique(items.map((x) => x.generated?.interview || "")).join("；");
+        const aiBeginner = unique(items.flatMap((x) => Array.isArray(x.aiBlueprint?.beginner) ? x.aiBlueprint.beginner : []));
+        const textbookCore = unique(items.flatMap((x) => x.aiBlueprint?.textbook?.core || []));
+        const textbookFramework = unique(items.flatMap((x) => x.aiBlueprint?.textbook?.framework || []));
+        const textbookCase = unique(items.flatMap((x) => x.aiBlueprint?.textbook?.caseDemo || []));
+        const textbookPitfalls = unique(items.flatMap((x) => x.aiBlueprint?.textbook?.pitfalls || []));
+        const textbookFormula = unique(items.map((x) => x.aiBlueprint?.textbook?.formula || "")).join("；");
+        const textbookScript = unique(items.map((x) => x.aiBlueprint?.textbook?.script || "")).join("；");
+        const aiTextbook = (textbookCore.length || textbookFramework.length || textbookCase.length || textbookPitfalls.length || textbookFormula || textbookScript)
+          ? {
+              core: textbookCore,
+              framework: textbookFramework,
+              formula: textbookFormula,
+              caseDemo: textbookCase,
+              pitfalls: textbookPitfalls,
+              script: textbookScript
+            }
+          : null;
+        const aiIndustry = def.key === "technical"
+          ? (items.find((x) => x.aiBlueprint?.aiIndustry)?.aiBlueprint?.aiIndustry || null)
+          : null;
+        return {
+          id: `topic-merged-${def.key}`,
+          title: def.title,
+          priority: priorityByIndex(idx),
+          day: dayByIndex(idx, moduleDefs.length, countdownLabels),
+          why: focusLines.length ? `聚合方向：${focusLines.join(" / ")}` : "该方向来自一级页面输入，已聚合展示。",
+          knowledge,
+          action,
+          interview: interview || "",
+          category: def.key,
+          moduleKey: def.key,
+          sourceHints,
+          aiBeginner,
+          aiTextbook,
+          aiIndustry
+        };
+      }).filter((t) => t.knowledge.length || t.action.length || t.aiBeginner.length || t.aiTextbook || t.aiIndustry);
+    }
+
+    function attachScheduleMetadata(activeTopics, payload) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const target = parseDateLocal(payload?.targetDate) || addDays(today, Math.max(7, activeTopics.length));
+      const targetDate = target.getTime() < today.getTime() ? today : target;
+      const remainingDays = Math.max(1, Math.ceil((targetDate.getTime() - today.getTime()) / 86400000));
+      const checklist = loadChecklist();
+
+      const orderedTasks = [...activeTopics].map((t, idx) => ({
+        ...t,
+        _moduleKey: normalizeModuleKey(t),
+        _originIdx: idx,
+        _taskStats: computeTopicTaskStats(t, checklist)
+      })).sort((a, b) => {
+        const sa = moduleOrderScore(a._moduleKey);
+        const sb = moduleOrderScore(b._moduleKey);
+        if (sa !== sb) return sa - sb;
+        return a._originIdx - b._originIdx;
+      });
+
+      const weights = orderedTasks.map((t) => Math.max(0, Number(t?._taskStats?.pending || 0)));
+      const totalWeight = weights.reduce((sum, x) => sum + x, 0);
+      const fallbackWeights = orderedTasks.map((t) => Math.max(1, Number(t?._taskStats?.total || 1)));
+      const effectiveWeights = totalWeight > 0 ? weights : fallbackWeights;
+      const effectiveTotal = effectiveWeights.reduce((sum, x) => sum + x, 0) || orderedTasks.length;
+      const rawAlloc = effectiveWeights.map((w) => (w / effectiveTotal) * remainingDays);
+      const dayAlloc = rawAlloc.map((x) => Math.floor(x));
+      let allocated = dayAlloc.reduce((sum, x) => sum + x, 0);
+      if (allocated < remainingDays) {
+        const remainders = rawAlloc.map((x, idx) => ({ idx, r: x - Math.floor(x) }))
+          .sort((a, b) => b.r - a.r);
+        let ptr = 0;
+        while (allocated < remainingDays && remainders.length) {
+          const pick = remainders[ptr % remainders.length];
+          dayAlloc[pick.idx] += 1;
+          allocated += 1;
+          ptr += 1;
+        }
+      }
+      if (allocated > remainingDays) {
+        for (let i = dayAlloc.length - 1; i >= 0 && allocated > remainingDays; i -= 1) {
+          if (dayAlloc[i] > 0) {
+            dayAlloc[i] -= 1;
+            allocated -= 1;
+          }
+        }
+      }
+
+      let cursor = 0;
+      orderedTasks.forEach((t, idx) => {
+        const span = Math.max(0, dayAlloc[idx] || 0);
+        const startDate = addDays(today, cursor);
+        const endDate = span > 0 ? addDays(today, cursor + span - 1) : startDate;
+        t._timelineStartDate = startDate;
+        t._timelineEndDate = endDate;
+        t._timelinePending = Math.max(0, Number(t?._taskStats?.pending || 0));
+        t._scheduledDate = startDate;
+        cursor += span;
+      });
+      const scheduleById = new Map(orderedTasks.map((t) => [t.id, {
+        scheduledDate: t._scheduledDate,
+        moduleKey: t._moduleKey,
+        timelineStartDate: t._timelineStartDate,
+        timelineEndDate: t._timelineEndDate,
+        timelinePending: t._timelinePending
+      }]));
+      return activeTopics.map((topic) => {
+        const scheduled = scheduleById.get(topic.id);
+        return {
+          ...topic,
+          _scheduledDate: scheduled?.scheduledDate || null,
+          _moduleKey: scheduled?.moduleKey || normalizeModuleKey(topic),
+          _timelineStartDate: scheduled?.timelineStartDate || null,
+          _timelineEndDate: scheduled?.timelineEndDate || null,
+          _timelinePending: Number(scheduled?.timelinePending || 0)
+        };
+      });
+    }
+
+    function applyLevel1Handoff() {
+      let payload = null;
+      try {
+        payload = JSON.parse(localStorage.getItem(level1HandoffKey) || "null");
+      } catch (e) {
+        payload = null;
+      }
+      if (!payload) {
+        currentLevel1Payload = null;
+        topics = JSON.parse(JSON.stringify(defaultTopics));
+        document.title = "✅ 找工计划 - 面试岗位";
+        topics = attachScheduleMetadata(topics, null);
+        dynamicCaseQuestions = loadCaseQuestions();
+        return;
+      }
+
+      currentLevel1Payload = payload;
+      dynamicCaseQuestions = loadCaseQuestions();
+      const generated = buildTopicsFromHandoff(payload);
+      topics = generated.length ? generated : JSON.parse(JSON.stringify(defaultTopics));
+      topics = attachScheduleMetadata(topics, payload);
+
+      const company = payload.companyName || "目标公司";
+      const role = payload.roleName || "目标岗位";
+      const positionSummary = [company, role].filter(Boolean).join(" ");
+      document.title = `✅ 找工计划 - ${positionSummary || "面试岗位"}`;
+      heroTitleEl.textContent = "找工101（beta测试版）";
+
+      const currentId = getTopicIdFromHash();
+      if (!topics.some((t) => t.id === currentId)) {
+        window.location.hash = topics[0]?.id || "";
+      }
+    }
+
+    const beginnerById = {
+      "topic-mode-design": [
+        "供应链模式：就是“货怎么从工厂到消费者”的组织方式。常见有直邮（从国内直接寄）和海外仓（先备货到当地再发）。",
+        "时效：用户下单到签收花了多久。时效越快通常成本越高。",
+        "履约：平台把订单交付成功的全过程，包含仓库、运输、清关、派送。",
+        "这题本质：在“更快”和“更省”之间找到可持续平衡。"
+      ],
+      "topic-cross-border-network": [
+        "头程：货物从国内仓到海外国家的第一段运输（空运/海运）。",
+        "清关：货物过海关，完成申报和税务处理。",
+        "尾程：货物到目的国后，最后一段送到用户手里的配送。",
+        "逆向物流：用户退货后的回流链路（退回、二次销售、销毁等）。"
+      ],
+      "topic-cost-model": [
+        "单位经济（UE）：一单到底赚还是亏，不看总盘子，先看单笔。",
+        "贡献毛利：订单收入减去可变成本后剩下的价值。",
+        "可变成本：会随单量变化而变化的成本，比如运费、包装、支付手续费。",
+        "这题本质：找出“哪类订单在吞利润”。"
+      ],
+      "topic-operating-kpi-tree": [
+        "指标树：把一个总目标拆成可执行、可追责的小指标。",
+        "北极星指标：最能代表业务健康度的核心指标。",
+        "OTD（On-time Delivery）：按承诺时间送达的比例。",
+        "这题本质：从‘看结果’变成‘能控制过程’。"
+      ],
+      "topic-root-cause-method": [
+        "根因分析：不是描述现象，而是找“真正导致问题”的原因。",
+        "切片：把总体数据按国家/渠道/承运商等维度拆开看。",
+        "贡献度：某个因素对总问题到底贡献了多少。",
+        "这题本质：先证据后结论，避免拍脑袋。"
+      ],
+      "topic-interview-templates": [
+        "结构化回答：先给框架，再讲细节，最后给落地和风险。",
+        "案例题：面试官常用业务问题看你如何思考，而不是看背诵。",
+        "量化表达：尽量用指标和阈值，减少“感觉上”的语言。",
+        "这题本质：把你的思路变得稳定可复用。"
+      ],
+      "topic-merchant-incentive": [
+        "商家激励：平台用规则引导商家做“平台希望的行为”。",
+        "流量激励：给表现好的商家更多曝光机会。",
+        "履约能力：商家在时效、缺货、售后上的稳定交付能力。",
+        "这题本质：奖励高质量供给，约束低质量供给。"
+      ],
+      "topic-3pl-governance": [
+        "3PL：第三方物流服务商，帮平台做仓配或运输。",
+        "SLA：服务等级承诺，例如“24小时出库”“95%按时签收”。",
+        "治理：通过准入、评分、奖惩管理服务商行为。",
+        "这题本质：确保物流服务“稳、可控、可替代”。"
+      ],
+      "topic-compliance-policy": [
+        "合规：业务是否满足当地法律、税务、海关规则。",
+        "关税：货物跨境时按规则缴纳的税费。",
+        "政策映射：把政策变化转成业务动作（比如改模式、改准入）。",
+        "这题本质：让业务增长不建立在违规风险上。"
+      ],
+      "topic-industry-research": [
+        "行业调研：不是搜资料，而是为“下一步策略”提供依据。",
+        "对标：拿竞品做参照，找自己差距。",
+        "趋势：未来会持续发生的结构性变化，不是短期噪音。",
+        "这题本质：知道‘别人怎么做’，更要知道‘我们怎么做’。"
+      ],
+      "topic-country-scenario": [
+        "国家场景题：把一个国家当成完整业务单元来做方案。",
+        "资源约束：预算、仓网、团队能力都有限，方案要现实。",
+        "阶段推进：先小范围试点，再扩量，不一次性铺开。",
+        "这题本质：在不确定环境下做可执行决策。"
+      ],
+      "topic-migration-story": [
+        "经验迁移：把你过去做过的能力换一种业务语言表达。",
+        "STAR：情境-任务-行动-结果，是行为面常用结构。",
+        "迁移价值：告诉面试官“我这套方法在新岗位同样有效”。",
+        "这题本质：让你的经历和岗位强相关。"
+      ],
+      "topic-final-checklist": [
+        "复盘清单：面试前把高频点系统化检查，降低临场失误。",
+        "高频题：最常被问到、最能区分候选人的题型。",
+        "速记卡：把关键框架压缩成一页，便于快速唤醒记忆。",
+        "这题本质：把准备转成稳定发挥。"
+      ]
+    };
+    const textbookById = {
+      "topic-mode-design": {
+        core: [
+          "模式设计不是二选一，而是组合优化问题：同一国家通常会并行存在直邮、海外仓、本地履约三套链路。",
+          "战略岗位要回答三件事：为什么选这个模式、什么时候切换、切换后如何控制风险。"
+        ],
+        framework: [
+          "四维评估：成本（Cost）、时效（Lead Time）、体验（NPS/投诉）、风险（合规+库存）。",
+          "品类分层：轻小件高频品优先快链路；重货/高客单适合海外仓；高退货品先做本地逆向闭环。",
+          "阶段推进：试点（10%流量）→验证（30%-40%）→扩量（>70%）。每一阶段设退出条件。"
+        ],
+        formula: "模式评分 = 0.35*单位履约成本 + 0.25*时效达成 + 0.20*体验指标 + 0.20*风险得分（按岗位目标可调权重）",
+        caseDemo: [
+          "若美国政策收紧导致直邮清关不稳定：先把高销量SKU迁移到海外仓，低动销长尾继续直邮，防止一次性压货。",
+          "用A/B验证：A组直邮、B组海外仓，比较7天妥投率、投诉率、履约成本/单。"
+        ],
+        pitfalls: [
+          "只看平均时效，不看P90/P95时效。",
+          "只看成本不看库存资金占用。",
+          "把模式切换当运营动作，忽视关务和财税前置。"
+        ],
+        script: "面试我会先给模式决策框架，再说明品类分层和阶段切换阈值，最后补风险预案，确保方案既能跑规模也能控波动。"
+      },
+      "topic-cross-border-network": {
+        core: [
+          "跨境履约是链路系统，不是单点问题。任何超时都要定位在具体段位：头程、清关、尾程或逆向。",
+          "面试里最加分的是你能把“异常”映射为“链路责任段+治理动作”。"
+        ],
+        framework: [
+          "头程：运力计划、舱位锁定、旺季备选线路。",
+          "清关：申报准确率、查验率、税则匹配、合规资料完备度。",
+          "尾程：承运商路由、区域服务等级、签收成功率。",
+          "逆向：退货质检、二次销售、销毁止损规则。"
+        ],
+        formula: "全链路时效 = 头程天数 + 清关天数 + 尾程天数 + 异常处理补偿时间",
+        caseDemo: [
+          "若P95时效突然恶化：先看是否清关放大，再看是否尾程某承运商爆仓。",
+          "若投诉集中在偏远区域：启用区域化承运商与时效承诺分层。"
+        ],
+        pitfalls: [
+          "把清关延迟误判为仓内效率问题。",
+          "只看妥投率，不看首次派送成功率。"
+        ],
+        script: "我会先按链路四段拆问题，再用承运商和地区切片定位主因，最后给短期止损与中长期网络优化动作。"
+      },
+      "topic-cost-model": {
+        core: [
+          "战略岗位需要单位经济可解释：每单赚/亏在哪里，为什么。",
+          "成本分析一定分国家、品类、履约模式，不看混合平均。"
+        ],
+        framework: [
+          "成本层：头程+仓储+操作+尾程+逆向+损耗+补贴。",
+          "收入层：实收货值、平台补贴、附加服务收入。",
+          "贡献层：贡献毛利/单、贡献毛利率、现金周转周期。"
+        ],
+        formula: "贡献毛利/单 = 实收收入 - (头程+仓储+操作+尾程+逆向+支付+营销分摊)",
+        caseDemo: [
+          "场景：GMV增长但利润下降。通常是低客单高退货订单占比升高，或尾程单价在高峰季上涨。",
+          "动作：提高包邮门槛、切仓、优化逆向策略、收敛低效SKU。"
+        ],
+        pitfalls: [
+          "只看毛利率，不看绝对贡献毛利。",
+          "忽略退货和赔付这类后置成本。"
+        ],
+        script: "我会先拆单位经济，再做结构归因，最后给可执行的降本与提效组合，不会只给一个单点动作。"
+      },
+      "topic-operating-kpi-tree": {
+        core: [
+          "指标树不是汇报工具，而是经营控制系统。",
+          "面试官关注你能否把指标连接到行动。"
+        ],
+        framework: [
+          "北极星：履约成本/单 + 准时妥投率。",
+          "二级：OTD、签收时效、缺货率、逆向周期、库存周转。",
+          "三级：仓内时长、承运商SLA、清关通过率、异常单恢复时长。",
+          "预警：按国家和模式分别设阈值，不共用一套标准。"
+        ],
+        formula: "经营健康指数 = 0.4*服务达成 + 0.35*成本达成 + 0.25*稳定性（异常率反向）",
+        caseDemo: [
+          "若OTD下降但成本不变：优先排查清关和尾程载荷。",
+          "若成本下降但投诉上升：说明服务等级被过度下调。"
+        ],
+        pitfalls: [
+          "指标过多导致无人负责。",
+          "指标口径不统一，跨团队对不上数。"
+        ],
+        script: "我会先定义北极星，再拆到可归责二三级指标，并把每个指标绑定到具体决策动作。"
+      },
+      "topic-root-cause-method": {
+        core: [
+          "根因分析的核心是去伪相关：先确认现象是否真实，再找主贡献因素。",
+          "分析必须有顺序，避免直接给解决方案。"
+        ],
+        framework: [
+          "四步法：确认异常 -> 维度切片 -> 贡献度拆分 -> 策略闭环。",
+          "切片建议：国家、履约模式、承运商、品类、时段。",
+          "闭环建议：短期止损（7天内）、中期优化（1个月）、机制修复（季度）。"
+        ],
+        formula: "异常贡献度 = 某维度变化量 * 该维度权重占比",
+        caseDemo: [
+          "‘时效变好但利润变差’：可能是加急比例过高或低毛利品类占比上升。",
+          "‘投诉上升但OTD稳定’：可能是签收后破损/错件上升，不在时效维度。"
+        ],
+        pitfalls: [
+          "用全局平均掩盖结构性问题。",
+          "把结论当成根因，不做验证。"
+        ],
+        script: "我的方法是先验证数据，再切分贡献，最后形成分阶段动作，而不是拍脑袋给单点方案。"
+      },
+      "topic-interview-templates": {
+        core: [
+          "面试临场稳定性来自模板化表达。",
+          "每题都要有指标、机制、风险三件套。"
+        ],
+        framework: [
+          "模板A（成本题）：定义目标 -> 拆成本 -> 选模式 -> 灰度验证 -> 风险控制。",
+          "模板B（时效题）：定位链路 -> 看分层 -> 触发治理 -> 复盘机制。",
+          "模板C（治理题）：定义行为目标 -> 规则设计 -> 激励约束 -> 监控防刷。"
+        ],
+        formula: "标准答题时长：20秒框架 + 40秒细节 + 20秒落地与风险",
+        caseDemo: [
+          "成本上升题：先锁定是头程还是尾程，再讲切换策略和影响。",
+          "治理题：先讲商家分层，再讲激励和惩罚如何配套。"
+        ],
+        pitfalls: [
+          "先讲案例再补框架，容易显得不系统。",
+          "全程没数字，可信度不足。"
+        ],
+        script: "这类题我会先给结构，再给一个可量化案例，最后补风险和验证计划。"
+      },
+      "topic-merchant-incentive": {
+        core: [
+          "激励本质是行为设计，不是补贴发放。",
+          "好的策略是让高质量商家持续增供给，让低质量商家自动出清。"
+        ],
+        framework: [
+          "商家分层：高履约高合规、低履约高合规、高履约低合规、双低。",
+          "激励工具：流量权重、佣金返还、履约补贴、活动资格。",
+          "约束工具：降权、限制资源位、保证金、淘汰机制。"
+        ],
+        formula: "商家综合分 = 0.35履约 + 0.25体验 + 0.20合规 + 0.20稳定性",
+        caseDemo: [
+          "高潜新商家：给冷启动流量和履约辅导，设30天考核。",
+          "高投诉商家：限流+整改期限，不达标降级或清退。"
+        ],
+        pitfalls: [
+          "只奖励GMV，不奖励履约质量。",
+          "规则过复杂导致商家理解成本高。"
+        ],
+        script: "我会按商家能力分层设计政策，确保激励和约束同时存在，避免只靠补贴拉动。"
+      },
+      "topic-3pl-governance": {
+        core: [
+          "3PL治理核心是‘可替代性 + 可比较性’。",
+          "只有评分体系透明，运量分配才有管理抓手。"
+        ],
+        framework: [
+          "准入：覆盖范围、峰值能力、历史稳定性、技术对接能力。",
+          "考核：准时率、妥投率、破损率、客诉率、异常恢复时长。",
+          "奖惩：月度分层运量倾斜，连续低分触发退出。"
+        ],
+        formula: "承运商季度得分 = 0.30时效 + 0.25妥投 + 0.20质量 + 0.15体验 + 0.10恢复能力",
+        caseDemo: [
+          "大促前做双承运商演练，避免单一路径拥堵。",
+          "对偏远区域引入本地尾程伙伴，提升首派成功率。"
+        ],
+        pitfalls: [
+          "把价格作为唯一分配标准。",
+          "无应急切流预案，峰值时系统失稳。"
+        ],
+        script: "我会先建评分和分层机制，再把运量配置与评分绑定，实现服务商生态的正向循环。"
+      },
+      "topic-compliance-policy": {
+        core: [
+          "政策不是背景知识，而是业务约束条件。",
+          "你要把政策变化转成可执行的平台动作。"
+        ],
+        framework: [
+          "识别政策冲击路径：税费、时效、责任主体、合规成本。",
+          "策略映射：模式切换、商家准入调整、风控阈值上调、资料前置审核。",
+          "监控机制：政策变化预警 + 48小时应急响应。"
+        ],
+        formula: "政策影响评估 = 成本增量 + 时效波动 + 合规风险暴露 - 策略对冲收益",
+        caseDemo: [
+          "若某国清关规则收紧：优先迁移高销量SKU到本地仓，降低口岸不确定性。",
+          "对高风险类目上调准入门槛，减少后续处罚和批量异常。"
+        ],
+        pitfalls: [
+          "只讲法规名词，不讲经营影响。",
+          "应对方案过慢，错过窗口期。"
+        ],
+        script: "我会先评估政策对成本与时效的影响，再快速调整履约模式和商家规则，确保业务稳定。"
+      },
+      "topic-industry-research": {
+        core: [
+          "行业研究的价值在于指导动作，而不是堆资料。",
+          "需要形成‘对标-差距-策略’闭环。"
+        ],
+        framework: [
+          "对标四维：模式、时效承诺、商家策略、服务治理。",
+          "趋势三条：本地化、合规化、体验分层。",
+          "输出模板：机会点、约束条件、优先动作、验证指标。"
+        ],
+        formula: "策略优先级 = 影响度 * 可行性 / 实施复杂度",
+        caseDemo: [
+          "对标头部平台后，若发现你方尾程稳定性弱，应先补服务商治理而非盲目降价。"
+        ],
+        pitfalls: [
+          "只做宏观判断，不落到可执行动作。",
+          "忽略本公司资源约束。"
+        ],
+        script: "我的行业洞察会直接输出到策略优先级和验证指标，不做无落地价值的研究。"
+      },
+      "topic-country-scenario": {
+        core: [
+          "国家场景题是综合能力测试：策略、经营、治理要一起讲。",
+          "回答关键是阶段感。"
+        ],
+        framework: [
+          "输入：市场规模、关税、物流密度、品类结构。",
+          "方案：网络模式、指标目标、组织与资源、风险预案。",
+          "阶段：试点-验证-扩量，每阶段有门槛。"
+        ],
+        formula: "阶段门槛示例：试点期OTD>92% 且 贡献毛利/单为正，才进入扩量",
+        caseDemo: [
+          "北美试点：高动销SKU海外仓，长尾直邮；目标是先稳时效再拉规模。"
+        ],
+        pitfalls: [
+          "一次性全量推进。",
+          "缺少退出和止损机制。"
+        ],
+        script: "我会按阶段讲国家策略：先试点验证，再扩量，过程中用明确门槛控制风险。"
+      },
+      "topic-migration-story": {
+        core: [
+          "你最大的优势是分析能力，要把它迁移为供应链经营能力表达。",
+          "面试官要看到你能‘从数据到机制’。"
+        ],
+        framework: [
+          "旧经验映射：增长漏斗 -> 履约漏斗；运营动作 -> 机制设计。",
+          "表达结构：场景、问题、方法、结果、可迁移点。",
+          "数字化：至少说清一个成本或时效指标变化。"
+        ],
+        formula: "STAR+M：Situation/Task/Action/Result + Migration（迁移价值）",
+        caseDemo: [
+          "把你过去的人群精细化方法迁移成承运商与模式分层治理。"
+        ],
+        pitfalls: [
+          "只讲做过什么，不讲怎么迁移。",
+          "过度夸大一线执行细节。"
+        ],
+        script: "我会把过往策略分析能力迁移到跨境履约经营上，核心是把指标洞察转成机制动作。"
+      },
+      "topic-final-checklist": {
+        core: [
+          "最后一天目标不是学新知识，而是把已有知识压缩成稳定输出。",
+          "你的目标是‘可复现的高质量回答’。"
+        ],
+        framework: [
+          "必会10题快问快答。",
+          "3个案例：成本异常、时效异常、治理设计。",
+          "1页速记卡：框架词、关键指标、风险点。"
+        ],
+        formula: "上场检查：框架完整度(40) + 数字支撑(30) + 落地可执行(30) >= 85",
+        caseDemo: [
+          "模拟追问：如果方案失败怎么办？提前准备止损与回滚答案。"
+        ],
+        pitfalls: [
+          "临场临时拼答案。",
+          "忘记给出风险控制。"
+        ],
+        script: "我的最终准备是确保每个高频题都能在90秒内给出结构化、可执行、可量化的回答。"
+      }
+    };
+
+    function loadChecklist() {
+      const key = getChecklistStoreKey();
+      try {
+        return JSON.parse(localStorage.getItem(key) || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveChecklist(data) {
+      localStorage.setItem(getChecklistStoreKey(), JSON.stringify(data));
+    }
+
+    function checklistKey(topicId, listType, idx) {
+      return `${topicId}::${listType}::${idx}`;
+    }
+
+    function topicChecklistStats(topic) {
+      const list = loadChecklist();
+      const total = (topic.knowledge?.length || 0) + (topic.action?.length || 0);
+      let done = 0;
+      (topic.knowledge || []).forEach((_, i) => {
+        if (list[checklistKey(topic.id, "knowledge", i)]) done += 1;
+      });
+      (topic.action || []).forEach((_, i) => {
+        if (list[checklistKey(topic.id, "action", i)]) done += 1;
+      });
+      return { done, total, complete: total > 0 && done === total };
+    }
+
+    function normalizeLlmConfig(next) {
+      if (!next || typeof next !== "object") return {};
+      let endpoint = String(next.endpoint || "").trim();
+      const model = String(next.model || "").trim();
+      const apiKey = String(next.apiKey || "").trim();
+      if (!endpoint) return { ...next, endpoint, model, apiKey };
+      const lower = endpoint.toLowerCase();
+      if (
+        lower.startsWith("http://")
+        && /api\.deepseek\.com|api\.openai\.com|openrouter\.ai|generativelanguage\.googleapis\.com|ark\.cn-beijing\.volces\.com/.test(lower)
+      ) {
+        endpoint = `https://${endpoint.slice("http://".length)}`;
+      }
+      return { ...next, endpoint, model, apiKey };
+    }
+
+    function loadLlmConfig() {
+      try {
+        return normalizeLlmConfig(JSON.parse(localStorage.getItem(llmConfigStoreKey) || "{}"));
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function loadQaStore() {
+      const key = getQaStoreKey();
+      try {
+        return JSON.parse(localStorage.getItem(key) || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveQaStore(store) {
+      localStorage.setItem(getQaStoreKey(), JSON.stringify(store));
+    }
+
+    function qaKey(topicId, sectionKey, idx) {
+      return `${topicId}::${sectionKey}::${idx}`;
+    }
+
+    function parseQaKey(key) {
+      const [topicId = "", sectionKey = "", idxStr = "0"] = String(key || "").split("::");
+      const idxNum = Number(idxStr);
+      return {
+        topicId,
+        sectionKey,
+        itemIndex: Number.isFinite(idxNum) ? idxNum : 0
+      };
+    }
+
+    function normalizeQaHistoryItem(item) {
+      if (!item || typeof item !== "object") return null;
+      const question = String(item.question || "").trim();
+      const answer = String(item.answer || item.lastAnswer || "").trim();
+      const distilledKeypoint = String(item.distilledKeypoint || item.keypoint || "").trim();
+      const distilledRich = String(item.distilledRich || item.keypointMarkdown || "").trim();
+      const askedAt = String(item.askedAt || item.createdAt || "").trim();
+      if (!question && !answer && !distilledKeypoint && !distilledRich) return null;
+      return { question, answer, distilledKeypoint, distilledRich, askedAt };
+    }
+
+    function normalizeQaRecord(record, fallbackMeta = {}) {
+      const base = record && typeof record === "object" ? record : {};
+      const mergedMeta = {
+        topicId: String(base.topicId || fallbackMeta.topicId || "").trim(),
+        sectionKey: String(base.sectionKey || fallbackMeta.sectionKey || "").trim(),
+        itemIndex: Number.isFinite(Number(base.itemIndex)) ? Number(base.itemIndex) : Number(fallbackMeta.itemIndex || 0),
+        context: String(base.context || fallbackMeta.context || "").trim()
+      };
+      const history = [];
+      if (Array.isArray(base.history)) {
+        base.history.forEach((item) => {
+          const normalized = normalizeQaHistoryItem(item);
+          if (normalized) history.push(normalized);
+        });
+      }
+      if (!history.length) {
+        const legacy = normalizeQaHistoryItem({
+          question: base.question,
+          answer: base.lastAnswer,
+          distilledKeypoint: base.distilledKeypoint,
+          distilledRich: base.distilledRich,
+          askedAt: base.askedAt
+        });
+        if (legacy) history.push(legacy);
+      }
+      return { ...mergedMeta, history };
+    }
+
+    function pickJdClues(payload, matchRegex) {
+      const jdText = String(payload?.jobDescription || "");
+      if (!jdText) return [];
+      const lines = splitToLines(jdText);
+      if (!lines.length) return [];
+      if (!matchRegex || typeof matchRegex.test !== "function") {
+        return lines
+          .filter((line) => /负责|需要|能力|经验|目标|优化|增长|分析|协同|管理|策略/.test(line))
+          .slice(0, 4);
+      }
+      return lines
+        .filter((line) => matchRegex.test(line))
+        .slice(0, 4);
+    }
+
+    function simpleHash(text) {
+      const str = String(text || "");
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i += 1) {
+        h ^= str.charCodeAt(i);
+        h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+      }
+      return (h >>> 0).toString(36);
+    }
+
+    function buildPayloadScopeKey(payload) {
+      if (!payload || typeof payload !== "object") return "default";
+      const seed = [
+        payload.createdAt || "",
+        payload.companyName || "",
+        payload.roleName || "",
+        String(payload.jobDescription || "").slice(0, 800),
+        payload.targetDate || ""
+      ].join("||");
+      return simpleHash(seed);
+    }
+
+    function getQaStoreKey() {
+      const scope = buildPayloadScopeKey(currentLevel1Payload);
+      return `${qaStoreKey}::${scope}`;
+    }
+
+    function getQaArchiveStoreKey() {
+      const scope = buildPayloadScopeKey(currentLevel1Payload);
+      return `${qaArchiveStoreKey}::${scope}`;
+    }
+
+    function getChecklistStoreKey() {
+      const scope = buildPayloadScopeKey(currentLevel1Payload);
+      return `${checklistStoreKey}::${scope}`;
+    }
+
+    function loadQaArchiveStore() {
+      try {
+        const value = JSON.parse(localStorage.getItem(getQaArchiveStoreKey()) || "[]");
+        return Array.isArray(value) ? value : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveQaArchiveStore(list) {
+      localStorage.setItem(getQaArchiveStoreKey(), JSON.stringify(Array.isArray(list) ? list : []));
+    }
+
+    function archiveAndClearQaRecords(topicId, sectionKeys) {
+      const targetSections = Array.isArray(sectionKeys) ? sectionKeys.map((x) => String(x || "").trim()) : [];
+      if (!topicId || !targetSections.length) return 0;
+      const qa = loadQaStore();
+      const archive = loadQaArchiveStore();
+      const keys = Object.keys(qa).filter((k) => {
+        const parsed = parseQaKey(k);
+        return parsed.topicId === topicId && targetSections.includes(parsed.sectionKey);
+      });
+      if (!keys.length) return 0;
+      const archivedAt = new Date().toLocaleString();
+      keys.forEach((k) => {
+        const parsed = parseQaKey(k);
+        const record = normalizeQaRecord(qa[k], parsed);
+        if (record.history.length) {
+          archive.push({
+            archivedAt,
+            topicId: record.topicId,
+            sectionKey: record.sectionKey,
+            itemIndex: record.itemIndex,
+            context: record.context,
+            history: record.history
+          });
+        }
+        delete qa[k];
+      });
+      saveQaStore(qa);
+      saveQaArchiveStore(archive);
+      return keys.length;
+    }
+
+    function getCaseQuestionsStoreKey() {
+      const scope = buildPayloadScopeKey(currentLevel1Payload);
+      return `${caseQuestionsStoreKey}::${scope}`;
+    }
+
+    function loadCaseQuestions() {
+      try {
+        const value = JSON.parse(localStorage.getItem(getCaseQuestionsStoreKey()) || "[]");
+        return Array.isArray(value) ? value.filter((x) => String(x || "").trim()) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveCaseQuestions(list) {
+      localStorage.setItem(getCaseQuestionsStoreKey(), JSON.stringify(Array.isArray(list) ? list : []));
+    }
+
+    function detectIndustryProfile(topic) {
+      const payload = currentLevel1Payload || {};
+      const text = [
+        payload.companyName || "",
+        payload.roleName || "",
+        payload.jobDescription || "",
+        topic?.title || "",
+        topic?.why || "",
+        (topic?.sourceHints || []).join(" ")
+      ].join(" ").toLowerCase();
+      const profiles = [
+        {
+          id: "game",
+          name: "游戏行业（发行/运营）",
+          regex: /(游戏|game|策划|数值|关卡|留存|付费|活跃|版本|赛事|电竞|gmv活动)/i,
+          metrics: [
+            "DAU（日活）= 当日活跃用户去重数；含义：衡量产品基本盘与流量承接能力。",
+            "D1留存率 = 次日仍活跃的新用户数 / 当日新增用户数；含义：衡量新手引导与首日体验。",
+            "ARPPU = 付费流水 / 付费用户数；含义：衡量付费深度与商业化结构。",
+            "LTV = 用户生命周期总收入；若LTV/CAC > 1通常代表投放与增长具备可持续性。"
+          ],
+          valueChain: "研发工作室 -> 发行平台/渠道 -> 买量与运营体系 -> 玩家生态（社区/赛事/内容）",
+          competition: "重点看发行能力、买量效率、内容更新节奏、社群生态与IP运营能力。",
+          trends: "跨端融合、长线运营、AIGC提效、内容社区化是高频趋势。"
+        },
+        {
+          id: "regional_sales",
+          name: "区域销售与渠道行业",
+          regex: /(区域销售|销售经理|经销商|渠道|终端|门店|铺货|拜访|回款|动销|地推|大区)/i,
+          metrics: [
+            "渠道覆盖率 = 有效铺货终端数 / 目标终端总数；含义：衡量市场触达广度。",
+            "动销率 = 有销量门店数 / 已铺货门店数；含义：衡量渠道质量与终端运营效率。",
+            "回款率 = 实际回款金额 / 应回款金额；含义：衡量现金流安全与销售质量。",
+            "单店产出 = 区域销售额 / 活跃终端数；含义：衡量单位渠道效率。"
+          ],
+          valueChain: "品牌方/厂家 -> 区域经销商 -> 终端门店/KA -> 消费者",
+          competition: "重点看渠道深度、终端执行、价格体系、促销资源与组织拜访效率。",
+          trends: "渠道数字化、即时零售、精细化分销与区域运营在线化是关键趋势。"
+        },
+        {
+          id: "logistics",
+          name: "供应链与物流行业",
+          regex: /(供应链|物流|仓配|履约|清关|运输|派送|海外仓|时效|成本)/i,
+          metrics: [
+            "OTD（准时达率）= 准时签收订单数 / 总订单数；含义：衡量履约稳定性。",
+            "单位履约成本 = 履约总成本 / 完成订单量；含义：衡量规模下的成本效率。",
+            "库存周转天数 = 平均库存 / 日均销售成本；含义：衡量资金占用效率。",
+            "逆向退货率 = 退货订单数 / 总订单数；含义：衡量商品与履约体验质量。"
+          ],
+          valueChain: "供给侧备货 -> 仓储分拨 -> 干线/清关 -> 末端配送 -> 逆向物流",
+          competition: "重点看时效、成本、覆盖、异常处理与网络弹性。",
+          trends: "本地化履约、智能调度、风控前置与服务分层是关键趋势。"
+        }
+      ];
+      const selected = profiles.find((p) => p.regex.test(text)) || {
+        id: "general",
+        name: "通用商业行业",
+        regex: /(负责|能力|经验|策略|运营|增长|管理|分析|产品|项目|客户|业务|协同)/i,
+        metrics: [
+          "收入增长率 = (本期收入 - 上期收入) / 上期收入；含义：衡量规模增长速度。",
+          "毛利率 = (营业收入 - 营业成本) / 营业收入；含义：衡量经营质量。",
+          "转化率 = 成交用户数 / 到达用户数；含义：衡量漏斗效率。",
+          "ROI = (项目收益 - 项目投入) / 项目投入；含义：衡量资源配置效率。"
+        ],
+        valueChain: "供给 -> 渠道/平台 -> 交付服务 -> 客户",
+        competition: "重点看目标客群、差异化能力、单位经济模型与执行效率。",
+        trends: "渠道碎片化、用户行为变化、数字化经营与组织协同升级。"
+      };
+      const keywordRegex = selected.regex;
+      const jdClues = pickJdClues(payload, keywordRegex);
+      return { ...selected, jdClues };
+    }
+
+    function buildIndustrySections(topic) {
+      const ai = topic?.aiIndustry && typeof topic.aiIndustry === "object" ? topic.aiIndustry : {};
+      const payload = currentLevel1Payload || {};
+      const profile = detectIndustryProfile(topic);
+      const companyName = String(payload.companyName || "目标公司").trim();
+      const roleName = String(payload.roleName || "目标岗位").trim();
+      const industryDictionary = (() => {
+        const raw = ai?.dictionary && typeof ai.dictionary === "object" ? ai.dictionary : {};
+        const toList = (v, fallback) => {
+          if (Array.isArray(v) && v.length) return v.map((x) => String(x || "").trim()).filter(Boolean);
+          if (typeof v === "string" && v.trim()) return [v.trim()];
+          return fallback;
+        };
+        return {
+          industry: String(raw?.industry || ai?.industryName || profile?.name || "").trim(),
+          keywords: toList(raw?.keywords || ai?.keywords, []).slice(0, 15),
+          section1A: toList(raw?.section1A || raw?.section_1A || raw?.["1A"], [
+            "行业价值链",
+            "价值链关键点",
+            "商业模式及其关键公式",
+            "面试场景与误区"
+          ]).slice(0, 8),
+          section1B: toList(raw?.section1B || raw?.section_1B || raw?.["1B"], [
+            "核心概念与关键指标",
+            "指标表达模板",
+            "常见误区"
+          ]).slice(0, 8),
+          section1C: toList(raw?.section1C || raw?.section_1C || raw?.["1C"], []).slice(0, 10),
+          section1D: toList(raw?.section1D || raw?.section_1D || raw?.["1D"], [
+            "行业重要趋势",
+            "趋势验证建议",
+            "常见误区"
+          ]).slice(0, 8),
+          section1DA: toList(raw?.section1DA || raw?.section_1DA || raw?.["1DA"], [
+            "职能核心知识"
+          ]).slice(0, 8),
+          section1E: toList(raw?.section1E || raw?.section_1E || raw?.["1E"], [
+            "其他关键维度"
+          ]).slice(0, 8)
+        };
+      })();
+      const ensureList = (value, fallback) => {
+        if (Array.isArray(value) && value.length) return value.map((x) => String(x || "").trim()).filter(Boolean);
+        if (typeof value === "string" && value.trim()) return [value.trim()];
+        return fallback;
+      };
+      const mergeWithBaseline = (value, baseline) => {
+        const aiList = ensureList(value, []);
+        const merged = [...baseline];
+        aiList.forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (merged.some((x) => x.includes(text) || text.includes(x))) return;
+          merged.push(text);
+        });
+        return merged;
+      };
+      const stripSectionPrefix = (text, code, title) => {
+        let out = String(text || "").trim();
+        if (!out) return "";
+        const esc = (s) => String(s || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const codeEsc = esc(code || "");
+        const titleEsc = esc(title || "");
+        const extraTitle = "其他值得关注维度";
+        const titleGroup = [titleEsc, esc(extraTitle)].filter(Boolean).join("|");
+        const patterns = [
+          new RegExp(`^\\s*${codeEsc}\\s*[-—_\\.]?\\s*\\d+[A-Za-z]?\\s*[:：\\-—]*\\s*`, "i"),
+          new RegExp(`^\\s*${codeEsc}\\s*[:：\\-—]+\\s*`, "i"),
+          new RegExp(`^\\s*${codeEsc}\\s*[【\\[(（]?\\s*(?:${titleGroup})\\s*[】\\])）]?\\s*[:：\\-—]*\\s*`, "i"),
+          new RegExp(`^\\s*[【\\[(（]?\\s*(?:${titleGroup})\\s*[】\\])）]?\\s*[:：\\-—]*\\s*`, "i")
+        ];
+        for (let i = 0; i < 2; i += 1) {
+          let changed = false;
+          patterns.forEach((re) => {
+            if (re.test(out)) {
+              out = out.replace(re, "").trim();
+              changed = true;
+            }
+          });
+          if (!changed) break;
+        }
+        return out;
+      };
+      const normalizeSectionItems = (items, code, title) => {
+        return (items || [])
+          .map((line) => stripSectionPrefix(line, code, title))
+          .map((line) => String(line || "").trim())
+          .filter(Boolean);
+      };
+      const reorderByDictionaryLabels = (items, labels, fallbackOrdered) => {
+        const cleanItems = (items || []).map((x) => String(x || "").trim()).filter(Boolean);
+        const cleanLabels = (labels || []).map((x) => String(x || "").trim()).filter(Boolean);
+        if (!cleanLabels.length) return fallbackOrdered;
+
+        const stopWords = new Set(["行业", "核心", "关键", "维度", "模板", "常见", "误区", "场景", "示例"]);
+        const tokenizedLabels = cleanLabels.map((label) => {
+          const tokens = label
+            .split(/[（()）、，,\/\-\s:：]/)
+            .map((x) => x.trim())
+            .filter((x) => x.length >= 2 && !stopWords.has(x));
+          return { label, tokens };
+        });
+        const buckets = cleanLabels.map(() => []);
+        const others = [];
+        cleanItems.forEach((text) => {
+          const idx = tokenizedLabels.findIndex((row) => {
+            if (text.includes(row.label)) return true;
+            return row.tokens.some((t) => text.includes(t));
+          });
+          if (idx >= 0) {
+            buckets[idx].push(text);
+          } else {
+            others.push(text);
+          }
+        });
+        return [...buckets.flat(), ...others];
+      };
+      const reorderIndustry1AItems = (items) => {
+        const unique = [];
+        (items || []).forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (unique.includes(text)) return;
+          unique.push(text);
+        });
+
+        const grouped = {
+          concrete: [],
+          keyPoint: [],
+          scenarioAndPitfalls: []
+        };
+        unique.forEach((text) => {
+          if (/关键公式|ROI\s*=|LTV\/CAC|动销率\s*=|OTD\s*=/.test(text)) {
+            return;
+          }
+          if (/面试场景与误区|场景示例|常见误区|stakeholder|面试追问|高频追问/.test(text)) {
+            grouped.scenarioAndPitfalls.push(text);
+            return;
+          }
+          if (/价值链关键点|关键点|关键环节|瓶颈|成本占比|关键抓手|杠杆|成本结构关键点/.test(text)) {
+            grouped.keyPoint.push(text);
+            return;
+          }
+          if (/商业模式|收入来源|成本结构|利润逻辑|关键公式|ROI|LTV\/CAC|动销率|OTD|盈利模型|变现模式/.test(text)) {
+            grouped.concrete.push(text);
+            return;
+          }
+          if (/行业价值链|上游|中游|下游|链路|分润|供给端|需求端|履约端|门店端|渠道端/.test(text)) {
+            grouped.concrete.push(text);
+            return;
+          }
+          // 1A默认归入“具体内容”组，保证紫色块优先展示完。
+          grouped.concrete.push(text);
+        });
+
+        const fallbackOrdered = [
+          ...grouped.concrete,
+          ...grouped.keyPoint,
+          ...grouped.scenarioAndPitfalls
+        ];
+        return fallbackOrdered;
+      };
+      const reorderIndustry1BItems = (items) => {
+        const unique = [];
+        (items || []).forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (unique.includes(text)) return;
+          unique.push(text);
+        });
+
+        const grouped = {
+          coreAndKpi: [],
+          template: [],
+          pitfalls: []
+        };
+        unique.forEach((text) => {
+          if (/指标表达模板|表达模板|先给定义/.test(text)) {
+            grouped.template.push(text);
+            return;
+          }
+          if (/常见误区|误区|只背指标名|不解释口径差异/.test(text)) {
+            grouped.pitfalls.push(text);
+            return;
+          }
+          if (/核心概念|关键指标|指标|同比|环比|渗透率|复购率|客单价|毛利率|CTR|CVR|ROI|LTV|CAC|AOV|ARPU|留存率|动销率|GMV|EBITDA/.test(text)) {
+            grouped.coreAndKpi.push(text);
+            return;
+          }
+          // 1B默认应归入“核心概念与关键指标”，避免漏判后掉到末尾。
+          grouped.coreAndKpi.push(text);
+        });
+
+        const fallbackOrdered = [
+          ...grouped.coreAndKpi,
+          ...grouped.template,
+          ...grouped.pitfalls
+        ];
+        const classify1B = (text) => {
+          const t = String(text || "");
+          if (/常见误区|误区|只背指标名|不解释口径差异/.test(t)) return 2;
+          if (/指标表达模板|表达模板|先给定义/.test(t)) return 1;
+          if (/GMV|ROI|CVR|CTR|CAC|LTV|AOV|ARPU|留存|渗透率|复购率|客单价|毛利率|同比|环比|转化率|核心概念|关键指标|指标/.test(t)) return 0;
+          return 0;
+        };
+        return fallbackOrdered
+          .map((text, idx) => ({ text, idx, bucket: classify1B(text) }))
+          .sort((a, b) => (a.bucket - b.bucket) || (a.idx - b.idx))
+          .map((x) => x.text);
+      };
+      const splitCompetitionFocusItems = (items) => {
+        const expanded = [];
+        const pushUnique = (line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (expanded.includes(text)) return;
+          expanded.push(text);
+        };
+        const toDimensionBullets = (text) => {
+          const raw = String(text || "").trim();
+          if (!raw) return [raw];
+          const isFocusLine = /竞争重点|重点看|重点关注|核心对比指标|比较|维度/.test(raw);
+          if (!isFocusLine) return [raw];
+
+          const head = raw.includes("：") ? raw.slice(0, raw.indexOf("：")) : "竞争重点";
+          const quoteMatch = raw.match(/比较[“"]([^”"]+)[”"]/);
+          if (quoteMatch && quoteMatch[1]) {
+            const dims = quoteMatch[1]
+              .split(/[-－—]/)
+              .map((x) => x.trim())
+              .filter(Boolean);
+            if (dims.length > 1) {
+              return dims.map((d, idx) => `${head}（维度${idx + 1}）：${d}。`);
+            }
+          }
+
+          const tail = raw.includes("：") ? raw.slice(raw.indexOf("：") + 1) : raw;
+          const cleanedTail = tail
+            .replace(/^重点看/, "")
+            .replace(/^重点关注/, "")
+            .replace(/^重点比较/, "")
+            .replace(/^比较/, "")
+            .replace(/[。；]+$/g, "")
+            .trim();
+          const commaDims = cleanedTail
+            .split(/[、，]/)
+            .map((x) => x.trim())
+            .filter(Boolean);
+          if (commaDims.length > 1) {
+            return commaDims.map((d, idx) => `${head}（维度${idx + 1}）：${d}。`);
+          }
+          return [raw];
+        };
+
+        (items || []).forEach((line) => {
+          toDimensionBullets(line).forEach((x) => pushUnique(x));
+        });
+        return expanded;
+      };
+      const reorderIndustry1CItems = (items) => {
+        const inferCompetitors = () => {
+          const jdText = String(payload.jobDescription || "").toLowerCase();
+          const hintText = Array.isArray(topic?.sourceHints) ? topic.sourceHints.join(" ").toLowerCase() : "";
+          const corpus = `${jdText} ${hintText}`;
+          const byName = [
+            "喜茶",
+            "茶颜悦色",
+            "奈雪的茶",
+            "沪上阿姨",
+            "古茗",
+            "蜜雪冰城",
+            "瑞幸",
+            "库迪"
+          ];
+          const found = byName.filter((name) => corpus.includes(name.toLowerCase()) && name !== companyName);
+          if (String(companyName).includes("霸王茶姬")) {
+            const preset = ["喜茶", "茶颜悦色", "奈雪的茶"];
+            return [...new Set([...found, ...preset])].filter((x) => x !== companyName).slice(0, 3);
+          }
+          if (found.length) return [...new Set(found)].slice(0, 3);
+          return ["头部竞品A", "头部竞品B", "头部竞品C"];
+        };
+        const normalizeDimensionLabel = (text) => {
+          const raw = String(text || "").toLowerCase();
+          if (industryDictionary.section1C.length) {
+            const hitFromDict = industryDictionary.section1C.find((label) => {
+              const norm = String(label || "").trim();
+              if (!norm) return false;
+              if (raw.includes(norm.toLowerCase())) return true;
+              const tokens = norm.split(/[（(、，\/\-\s]/).map((x) => x.trim()).filter((x) => x.length >= 2);
+              return tokens.some((t) => raw.includes(t.toLowerCase()));
+            });
+            if (hitFromDict) return hitFromDict;
+          }
+          const map = [
+            { re: /品牌|ip|心智/, label: "品牌力（品牌心智/IP）" },
+            { re: /客群|人群|用户/, label: "客群匹配度（目标客群渗透）" },
+            { re: /渠道|门店覆盖|铺货/, label: "渠道能力（覆盖与执行）" },
+            { re: /产品|服务|爆品|上新|sku/, label: "产品创新（上新与爆品迭代）" },
+            { re: /供应链|履约|交付|时效/, label: "供应链效率（履约与稳定性）" },
+            { re: /门店|空间|体验|终端/, label: "门店体验（终端转化）" },
+            { re: /数字化|会员|数据|系统/, label: "数字化能力（会员与运营系统）" },
+            { re: /效率|单位经济|roi|毛利|成本/, label: "单位经济模型（效率与盈利）" },
+            { re: /市场份额|份额变化/, label: "市场份额（份额变化与抢占）" }
+          ];
+          const hit = map.find((x) => x.re.test(raw));
+          if (hit) return hit.label;
+          return "";
+        };
+        const buildDimensionBrief = (dimension, company, competitors) => {
+          const [c1 = "头部竞品A", c2 = "头部竞品B", c3 = "头部竞品C"] = competitors;
+          if (/品牌力/.test(dimension)) {
+            return `${company}：强化差异化品牌叙事与内容联动；${c1}：偏年轻化联名与社媒传播；${c2}：区域文化标签强；${c3}：以全国化标准化扩张。竞争力排序参考：${company}/${c1}/${c2}/${c3}（需结合目标城市修正）。`;
+          }
+          if (/客群/.test(dimension)) {
+            return `${company}：聚焦核心消费人群并强化复购；${c1}：覆盖更广泛白领场景；${c2}：在区域年轻客群黏性更高；${c3}：以价格带覆盖下沉客群。竞争力排序参考：按“渗透率+复购率+客单”综合评估。`;
+          }
+          if (/渠道能力/.test(dimension)) {
+            return `${company}：重点城市高密布局并提升单店产出；${c1}：一线商圈密度高；${c2}：区域深耕能力强；${c3}：以标准化加盟拓展速度快。竞争力排序参考：看覆盖密度、动销率与新店爬坡速度。`;
+          }
+          if (/产品创新/.test(dimension)) {
+            return `${company}：围绕核心品类做季节性上新；${c1}：联名上新频次高；${c2}：在区域口味创新更突出；${c3}：强调大单品与供应效率。竞争力排序参考：看上新成功率、爆品贡献与复购。`;
+          }
+          if (/供应链效率/.test(dimension)) {
+            return `${company}：强调原料与门店协同稳定；${c1}：供应链标准化成熟；${c2}：区域供给响应快；${c3}：规模采购与成本控制更强。竞争力排序参考：看缺货率、履约时效、单位成本。`;
+          }
+          if (/门店体验/.test(dimension)) {
+            return `${company}：强化门店空间与服务一致性；${c1}：门店坪效和动线成熟；${c2}：场景氛围与体验辨识度高；${c3}：标准化体验复制快。竞争力排序参考：看到店转化、停留时长、NPS。`;
+          }
+          if (/数字化能力/.test(dimension)) {
+            return `${company}：加强会员运营与活动触达；${c1}：数字化营销工具成熟；${c2}：私域互动与社群运营活跃；${c3}：以规模化系统驱动活动效率。竞争力排序参考：看会员渗透、复购提升、活动ROI。`;
+          }
+          if (/市场份额/.test(dimension)) {
+            return `${company}：在核心城市持续争夺份额；${c1}：在头部商圈份额稳定；${c2}：区域份额优势明显；${c3}：凭规模扩张快速提升。竞争力排序参考：看份额增速、同店增长与渠道新增贡献。`;
+          }
+          return "";
+        };
+        const unique = [];
+        (items || []).forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (unique.includes(text)) return;
+          unique.push(text);
+        });
+
+        const grouped = {
+          companyAdvantage: [],
+          competitorAnalysis: [],
+          competitionFocus: [],
+          sceneAndPitfalls: []
+        };
+        unique.forEach((text) => {
+          if (/场景示例|面试场景|常见误区|误区|动作启示|优先优化哪个杠杆|追问/.test(text)) {
+            grouped.sceneAndPitfalls.push(text);
+            return;
+          }
+          if (
+            /竞争重点|核心对比指标|重点看|重点关注|维度\d+|市场份额|份额变化|对比指标|比较维度|客群|渠道|产品\/服务|效率|执行效率/.test(text)
+          ) {
+            grouped.competitionFocus.push(text);
+            return;
+          }
+          if (
+            /竞争优势|公司优势|本公司优势|领先点|护城河|壁垒/.test(text)
+            || (
+              companyName
+              && text.includes(companyName)
+              && /优势|领先|护城河|壁垒|能力|强在|高于|更快|更稳|龙头|全国|门店|供应链/.test(text)
+            )
+          ) {
+            grouped.companyAdvantage.push(text);
+            return;
+          }
+          if (/竞品|竞争者|对手|头部|第二梯队|替代|差异化|竞争格局|识别头部|直接竞争者|间接竞争者/.test(text)) {
+            grouped.competitorAnalysis.push(text);
+            return;
+          }
+          // 1C里未命中规则的内容默认归到“行业竞争格局”组，避免掉到末尾。
+          grouped.competitorAnalysis.push(text);
+        });
+        const competitors = inferCompetitors();
+        const rawDimensionPool = [...grouped.competitionFocus, ...grouped.competitorAnalysis];
+        const dimensionLabels = [...industryDictionary.section1C];
+        const evidenceByLabel = new Map();
+        const cleanEvidence = (text, label) => {
+          return String(text || "")
+            .replace(/^关键竞争维度(?:（维度\d+）|\d+)?[:：]?\s*/i, "")
+            .replace(/^行业竞争重点[:：]?\s*/i, "")
+            .replace(/^竞争格局[:：]?\s*/i, "")
+            .replace(new RegExp(`^${String(label || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[:：]?\\s*`), "")
+            .trim();
+        };
+        rawDimensionPool.forEach((text) => {
+          const label = normalizeDimensionLabel(text);
+          if (!label) return;
+          if (!evidenceByLabel.has(label)) {
+            evidenceByLabel.set(label, cleanEvidence(text, label));
+          }
+          if (dimensionLabels.includes(label)) return;
+          if (industryDictionary.section1C.length) return;
+          dimensionLabels.push(label);
+        });
+        if (!dimensionLabels.length) {
+          dimensionLabels.push("综合竞争力（品牌/渠道/产品/效率）");
+        }
+        const normalizedDimensionBullets = [];
+        dimensionLabels.forEach((label, idx) => {
+          const evidence = evidenceByLabel.get(label) || "";
+          const brief = buildDimensionBrief(label, companyName, competitors);
+          const tail = evidence || brief;
+          const line = tail
+            ? `${label}：${tail}`
+            : `${label}。`;
+          if (!normalizedDimensionBullets.includes(line)) {
+            normalizedDimensionBullets.push(line);
+          }
+        });
+
+        return [
+          ...grouped.companyAdvantage,
+          ...normalizedDimensionBullets,
+          ...grouped.sceneAndPitfalls
+        ];
+      };
+      const reorderIndustry1DItems = (items) => {
+        const unique = [];
+        (items || []).forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (unique.includes(text)) return;
+          unique.push(text);
+        });
+        const grouped = {
+          trendDetails: [],
+          validation: [],
+          pitfalls: []
+        };
+        unique.forEach((text) => {
+          if (/常见误区|误区|陷阱|只看|忽视|盲目|无验证/.test(text)) {
+            grouped.pitfalls.push(text);
+            return;
+          }
+          if (/趋势验证建议|验证|领先指标|验证周期|阈值|试点|A\/B|复盘|监控|看板/.test(text)) {
+            grouped.validation.push(text);
+            return;
+          }
+          if (/贡献度公式|公式示例|增长贡献|ROI|LTV|CAC/.test(text)) {
+            return;
+          }
+          if (/关键趋势判断|趋势拆解|趋势维度提示|趋势总结|趋势概览/.test(text)) {
+            return;
+          }
+          grouped.trendDetails.push(text);
+        });
+
+        const detailFinal = grouped.trendDetails.slice(0, 6);
+        const validationFinal = grouped.validation.length ? [grouped.validation[0]] : [];
+        const pitfallsFinal = grouped.pitfalls.length ? [grouped.pitfalls[0]] : [];
+        return [...detailFinal, ...validationFinal, ...pitfallsFinal];
+      };
+      const buildFunctionalCoreFromProfile = (profileObj) => {
+        const profile = profileObj && typeof profileObj === "object" ? profileObj : {};
+        const fnName = String(profile.functionName || profile.function_name || "").trim();
+        const keywords = ensureList(profile.functionKeywords || profile.function_keywords, []).slice(0, 8);
+        const competencies = ensureList(profile.competencyLibrary || profile.competency_library, []).slice(0, 6);
+        const tools = ensureList(profile.toolsMethods || profile.tools_methods, []).slice(0, 6);
+        const lines = [];
+        if (fnName) {
+          lines.push(`职能识别：${fnName}${keywords.length ? `（关键词：${keywords.join("、")}）` : ""}。`);
+        } else if (keywords.length) {
+          lines.push(`职能关键词：${keywords.join("、")}。`);
+        }
+        competencies.forEach((x, idx) => {
+          lines.push(`能力要求${idx + 1}：${x}`);
+        });
+        tools.forEach((x, idx) => {
+          lines.push(`方法论/工具${idx + 1}：${x}`);
+        });
+        const deduped = [];
+        lines.forEach((x) => {
+          const text = String(x || "").trim();
+          if (!text) return;
+          if (deduped.includes(text)) return;
+          deduped.push(text);
+        });
+        return deduped.slice(0, 6);
+      };
+      const reorderIndustry1DAItems = (items) => {
+        const unique = [];
+        (items || []).forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (unique.includes(text)) return;
+          unique.push(text);
+        });
+        return unique.slice(0, 6);
+      };
+      const reorderIndustry1EItems = (items) => {
+        const shouldDrop = (text) => /面试高分表达|高分表达|背诵话术|贡献度公式|公式示例|增长贡献\s*=/.test(text);
+        const normalizeForDedup = (text) =>
+          String(text || "")
+            .replace(/^1E[\s【\[]?.*?[\]】]?\s*/i, "")
+            .replace(/^其他关键维度[:：]?\s*/i, "")
+            .replace(/^JD定制线索[:：]?\s*/i, "")
+            .replace(/[\s，,。；;：:（）()【】\[\]—\-]/g, "")
+            .toLowerCase();
+
+        const seen = new Set();
+        const policyBucket = [];
+        const deduped = [];
+        (items || []).forEach((line) => {
+          const text = String(line || "").trim();
+          if (!text) return;
+          if (shouldDrop(text)) return;
+          if (/政策与合规|政策风险|监管|准入|合规/.test(text)) {
+            policyBucket.push(text);
+            return;
+          }
+          const key = normalizeForDedup(text);
+          if (!key) return;
+          if (seen.has(key)) return;
+          seen.add(key);
+          deduped.push(text);
+        });
+        if (policyBucket.length) {
+          deduped.unshift("政策与合规：关注政策变化、准入与监管要求，并同步识别政策风险及应对动作（如标准加严、原料限制）。");
+        }
+        return deduped;
+      };
+      const sourceHint = Array.isArray(topic?.sourceHints) && topic.sourceHints.length
+        ? topic.sourceHints.map((x) => `JD定制线索：${x}`)
+        : profile.jdClues.map((x) => `JD定制线索：${x}`);
+      const jdCue1 = sourceHint[0] ? sourceHint[0].replace(/^JD定制线索：/, "") : `${companyName} ${roleName}`;
+      const jdCue2 = sourceHint[1] ? sourceHint[1].replace(/^JD定制线索：/, "") : `${roleName}需要跨模块协同`;
+      const industryFormulaLine = profile.id === "game"
+        ? `关键公式（结合JD：${jdCue1}）：LTV/CAC = 用户生命周期价值 / 获客成本；当LTV/CAC > 1代表增长基本可持续。`
+        : profile.id === "regional_sales"
+          ? `关键公式（结合JD：${jdCue1}）：动销率 = 有销量门店数 / 已铺货门店数；它反映渠道质量而非单纯铺货规模。`
+          : profile.id === "logistics"
+            ? `关键公式（结合JD：${jdCue1}）：OTD = 准时签收订单数 / 总订单数；它直接衡量履约稳定性与客户体验。`
+            : `关键公式（结合JD：${jdCue1}）：ROI = (项目收益 - 项目投入) / 项目投入；用于判断资源配置是否值得继续加码。`;
+      const companyAdvantageLine = `竞争优势（${companyName}）：结合岗位${roleName}，优先说明该公司在品牌势能、渠道覆盖、供应链协同或组织执行中的领先点，并解释为何更适配该岗位目标。`;
+      const scenarioLine = `面试场景与误区（结合JD：${jdCue2}）：请用一个真实业务场景说明关键stakeholder如何影响结果；常见误区是只讲总部策略，不讲一线执行链路。`;
+      const rawHintLines = sourceHint
+        .map((x) => String(x || "").replace(/^JD定制线索：/, "").trim())
+        .filter(Boolean);
+      const jdSpecificValueChain = rawHintLines.length
+        ? rawHintLines.slice(0, 3).map((hint, idx) => {
+            if (idx === 0) {
+              return `基于JD职责「${hint}」，先定位该岗位对应的价值链环节（供给/渠道/平台/交付/服务），并明确该环节如何创造价值。`;
+            }
+            if (idx === 1) {
+              return `结合JD要求「${hint}」，商业模式请拆成“收入来源 + 成本结构 + 利润逻辑”，并说明你会优先优化的经营杠杆。`;
+            }
+            return `面试表达建议（对应JD「${hint}」）：按“链路位置 -> 核心矛盾 -> 优化动作 -> 验证指标”展开，避免只讲概念。`;
+          })
+        : [
+            `基于岗位「${roleName}」，先定位该岗位在价值链中的主责环节，并说明价值创造方式。`,
+            "商业模式请拆成“收入来源 + 成本结构 + 利润逻辑”，并给出可执行的优化杠杆。",
+            "面试表达建议：按“链路位置 -> 核心矛盾 -> 优化动作 -> 验证指标”展开。"
+          ];
+      const valueChain = mergeWithBaseline(ai.valueChain, [
+        ...jdSpecificValueChain,
+        `行业价值链参考骨架：${profile.valueChain}。请结合JD判断当前岗位最关键的1-2个环节。`
+      ]);
+      const coreConcepts = mergeWithBaseline(ai.coreConcepts, [
+        ...profile.metrics,
+        `指标表达模板（结合JD：${jdCue1}）：先给定义，再给公式，再解释业务含义，最后给你在该岗位会怎么优化。`,
+        `常见误区（结合JD：${jdCue2}）：只背指标名，不解释口径差异与切片维度（渠道/区域/人群）。`
+      ]);
+      const competition = splitCompetitionFocusItems(mergeWithBaseline(ai.competition, [
+        companyAdvantageLine,
+        `竞争格局：围绕${companyName}识别头部与直接竞争者，比较“客群-渠道-产品/服务-效率”。`,
+        `竞品分析（结合JD：${jdCue1}）：至少选择2个直接竞争者，分别说明其客群定位、渠道打法、产品策略与执行效率差异。`,
+        `行业竞争重点（结合岗位${roleName}）：${profile.competition}`,
+        `核心对比指标：市场份额 = 公司销售额 / 行业总销售额；结合JD线索“${jdCue1}”说明份额变化如何影响岗位目标。`,
+        `场景示例（结合JD：${jdCue2}）：若竞品在关键指标（如留存/动销/时效）领先，你会优先优化哪个杠杆并如何验证。`,
+        "常见误区：只做品牌罗列，不回答“对当前应聘岗位的动作启示”。"
+      ]));
+      const trendsRaw = ensureList(ai.trends, []);
+      const trends = trendsRaw.length
+        ? reorderIndustry1DItems(trendsRaw)
+        : ["趋势信息不足，请回一级页补充更多岗位相关信息。"];
+      const functionalProfile = ai?.functionalProfile && typeof ai.functionalProfile === "object"
+        ? ai.functionalProfile
+        : {};
+      const functionalCore = reorderIndustry1DAItems(buildFunctionalCoreFromProfile(functionalProfile));
+      const extra = mergeWithBaseline(ai.extra, [
+        "政策与合规：关注政策变化对成本、准入与风险暴露的影响。",
+        "区域结构：不同区域渠道密度、供给能力、用户偏好不同，策略应分层。",
+        "风险韧性：避免单点依赖，准备备选渠道/服务商/资源池。"
+      ]);
+      const sectionA = { code: "1A", sectionKey: "industry_1A", title: "行业价值链", items: [...reorderIndustry1AItems(valueChain), ...sourceHint] };
+      const sectionB = { code: "1B", sectionKey: "industry_1B", title: "行业核心概念", items: [...reorderIndustry1BItems(coreConcepts)] };
+      const sectionC = { code: "1C", sectionKey: "industry_1C", title: "行业竞争格局", items: [...reorderIndustry1CItems(competition), ...sourceHint] };
+      const sectionD = { code: "1D", sectionKey: "industry_1D", title: "行业重要趋势", items: [...trends, ...sourceHint] };
+      const sectionDA = {
+        code: "1DA",
+        sectionKey: "industry_1DA",
+        title: "职能核心知识",
+        items: functionalCore.length ? [...functionalCore] : ["职能信息不足，请回一级页补充更多岗位相关信息。"]
+      };
+      const sectionE = { code: "1E", sectionKey: "industry_1E", title: "其他关键维度", items: [...reorderIndustry1EItems([...extra, ...sourceHint])] };
+      const sections = [sectionA, sectionB, sectionC, sectionD, sectionDA, sectionE];
+      return sections.map((s) => ({
+        ...s,
+        items: normalizeSectionItems(s.items, s.code, s.title)
+      }));
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function fallbackCaseQuestionsFromKeywords(payload) {
+      const roleName = String(payload?.roleName || "目标岗位").trim();
+      const jdLines = splitToLines(String(payload?.jobDescription || "")).slice(0, 10);
+      const keywordSeeds = tokenizeFocus([roleName, ...jdLines].join(" "))
+        .filter((x, idx, arr) => arr.indexOf(x) === idx)
+        .slice(0, 6);
+      const k1 = keywordSeeds[0] || "核心指标";
+      const k2 = keywordSeeds[1] || "跨团队协同";
+      const k3 = keywordSeeds[2] || "业务增长";
+      return [
+        `你负责的${k1}连续两周下滑，请在15分钟内给出问题拆解框架、优先排查路径和首轮修复动作。`,
+        `围绕「${k2}」场景，如何推动产品、运营、技术在一周内达成一致并落地？请给出推进计划。`,
+        `预算缩减20%但增长目标不变，你会如何重排资源并验证「${k3}」策略有效性？`,
+        `面对竞品发起强势活动导致转化波动，你会如何制定短期止损与中长期反制方案？`,
+        `请设计一个90天行动计划：从现状诊断到目标达成，说明里程碑、风险点与复盘机制。`
+      ];
+    }
+
+    async function generateCaseQuestionsWithLlm(payload) {
+      const config = loadLlmConfig();
+      const cfg = normalizeLlmConfig(config);
+      if (!cfg.endpoint || !cfg.model || !cfg.apiKey) {
+        return fallbackCaseQuestionsFromKeywords(payload);
+      }
+      const roleName = String(payload?.roleName || "目标岗位").trim();
+      const companyName = String(payload?.companyName || "目标公司").trim();
+      const jdLines = splitToLines(String(payload?.jobDescription || "")).slice(0, 18);
+      const systemPrompt = [
+        "你是面试教练，请基于岗位关键词生成情景案例模拟题。",
+        "必须返回严格JSON：{\"questions\":[\"...\", \"...\"]}",
+        "要求：",
+        "1) 只返回5道题，中文。",
+        "2) 必须紧扣岗位职责和人才画像，避免泛化空题。",
+        "3) 每题是可演练的业务情景，包含目标/约束/冲突中的至少一个。",
+        "4) 不要输出答案，不要输出解释。"
+      ].join("\n");
+      const userPrompt = JSON.stringify({
+        companyName,
+        roleName,
+        jdKeywords: jdLines
+      });
+      const fetchWithTimeout = async (url, options, timeoutMs) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          return await fetch(url, { ...options, signal: controller.signal });
+        } finally {
+          clearTimeout(timer);
+        }
+      };
+      const headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/plain;q=0.9, */*;q=0.8",
+        "Authorization": `Bearer ${cfg.apiKey}`
+      };
+      if (/openrouter\.ai/i.test(cfg.endpoint)) {
+        headers["HTTP-Referer"] = window.location.origin;
+        headers["X-Title"] = "Interview Prep Demo";
+      }
+      const res = await fetchWithTimeout(cfg.endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          model: cfg.model,
+          temperature: 0.5,
+          response_format: { type: "json_object" },
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt }
+          ]
+        })
+      }, 45000);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const raw = await res.text();
+      const data = JSON.parse(raw);
+      const content = data?.choices?.[0]?.message?.content || "";
+      const contentText = String(content || "").trim();
+      let parsed = {};
+      try {
+        parsed = JSON.parse(contentText || "{}");
+      } catch (_) {
+        const match = contentText.match(/\{[\s\S]*\}/);
+        parsed = match ? JSON.parse(match[0]) : {};
+      }
+      const list = Array.isArray(parsed?.questions) ? parsed.questions : [];
+      const cleaned = list.map((x) => String(x || "").trim()).filter(Boolean).slice(0, 5);
+      if (cleaned.length < 5) {
+        return fallbackCaseQuestionsFromKeywords(payload);
+      }
+      return cleaned;
+    }
+
+    async function refreshCaseQuestionsAndRender(showStatus = true) {
+      const payload = currentLevel1Payload || {};
+      if (showStatus) llmStatusEl.textContent = "正在刷新案例模拟题...";
+      try {
+        const list = await generateCaseQuestionsWithLlm(payload);
+        dynamicCaseQuestions = list;
+        saveCaseQuestions(list);
+        if (showStatus) llmStatusEl.textContent = "案例模拟题已刷新";
+        renderAll();
+      } catch (e) {
+        dynamicCaseQuestions = fallbackCaseQuestionsFromKeywords(payload);
+        saveCaseQuestions(dynamicCaseQuestions);
+        if (showStatus) llmStatusEl.textContent = "刷新失败，已回退默认案例题";
+        renderAll();
+      }
+    }
+
+    function initLlmTools() {
+      const config = loadLlmConfig();
+      const ok = config.endpoint && config.model && config.apiKey;
+      llmStatusEl.textContent = ok ? "已读取一级页面配置，可提问" : "未读取到配置，请先去一级页面填写模型/API Key";
+      exportWordBtn.addEventListener("click", () => {
+        exportNotesAsWord();
+      });
+      exportExcelBtn.addEventListener("click", () => {
+        exportNotesAsExcel();
+      });
+    }
+
+    async function callLLM(config, userQuestion, contextText) {
+      const cfg = normalizeLlmConfig(config);
+      const systemPrompt = [
+        "你是供应链与物流学习助教。",
+        "请根据学习者的问题和给定知识点上下文回答。",
+        "必须返回严格JSON格式：{\"answer\":\"...\",\"keypoint\":\"...\",\"keypoint_markdown\":\"...\"}",
+        "answer用于详细解释；keypoint用于提炼并回写为一句核心知识点。",
+        "keypoint_markdown用于提炼并回写可结构化内容（可包含markdown表格/列表）。",
+        "keypoint长度控制在40字内。"
+      ].join("\n");
+      const body = {
+        model: cfg.model,
+        temperature: 0.2,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `知识点上下文：${contextText}\n学习者问题：${userQuestion}` }
+        ],
+        response_format: { type: "json_object" }
+      };
+
+      const fetchWithTimeout = async (url, options, timeoutMs) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          return await fetch(url, { ...options, signal: controller.signal });
+        } finally {
+          clearTimeout(timer);
+        }
+      };
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const parseJsonLoose = (rawText) => {
+        const text = String(rawText || "").trim();
+        if (!text) throw new Error("响应体为空");
+        try {
+          return JSON.parse(text);
+        } catch (_) {}
+        const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+        if (fence && fence[1]) {
+          try {
+            return JSON.parse(fence[1].trim());
+          } catch (_) {}
+        }
+        const start = text.indexOf("{");
+        const end = text.lastIndexOf("}");
+        if (start !== -1 && end !== -1 && end > start) {
+          const sliced = text.slice(start, end + 1);
+          try {
+            return JSON.parse(sliced);
+          } catch (_) {}
+          try {
+            return JSON.parse(sliced.replace(/,\s*([}\]])/g, "$1"));
+          } catch (_) {}
+        }
+        throw new Error(`响应不是有效JSON：${text.replace(/\s+/g, " ").slice(0, 160)}`);
+      };
+      const extractMessageContent = (data) => {
+        const content = data?.choices?.[0]?.message?.content;
+        if (typeof content === "string") return content;
+        if (Array.isArray(content)) {
+          return content
+            .map((x) => {
+              if (typeof x === "string") return x;
+              if (x && typeof x.text === "string") return x.text;
+              return "";
+            })
+            .join("\n")
+            .trim();
+        }
+        if (typeof data?.output_text === "string") return data.output_text;
+        return "";
+      };
+
+      const buildNetworkHint = (message) => {
+        if (cfg.endpoint.startsWith("http://") && window.location.protocol === "https:") {
+          return `${message}；当前页面是HTTPS，接口是HTTP，浏览器会拦截混合内容`;
+        }
+        if (/failed to fetch/i.test(message)) {
+          return `${message}；可能是CORS、网络阻断或API服务不可达`;
+        }
+        return message;
+      };
+
+      let lastErr = null;
+      for (let attempt = 1; attempt <= 2; attempt += 1) {
+        let res;
+        try {
+          const headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain;q=0.9, */*;q=0.8",
+            "Authorization": `Bearer ${cfg.apiKey}`
+          };
+          if (/openrouter\.ai/i.test(cfg.endpoint)) {
+            headers["HTTP-Referer"] = window.location.origin;
+            headers["X-Title"] = "Interview Prep Demo";
+          }
+          res = await fetchWithTimeout(cfg.endpoint, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(body)
+          }, 45000);
+        } catch (err) {
+          const msg = err && err.name === "AbortError"
+            ? "AI请求超时（45s）"
+            : buildNetworkHint(String(err?.message || err || "unknown"));
+          lastErr = new Error(msg);
+          if (attempt < 2) {
+            await sleep(1200);
+            continue;
+          }
+          throw lastErr;
+        }
+
+        const raw = await res.text();
+        if (!res.ok) {
+          const transient = res.status === 429 || res.status >= 500;
+          let detail = raw.replace(/\s+/g, " ").slice(0, 180);
+          try {
+            const parsedErr = parseJsonLoose(raw);
+            detail =
+              parsedErr?.error?.message
+              || parsedErr?.message
+              || detail;
+          } catch (_) {}
+          lastErr = new Error(`HTTP ${res.status} ${detail}`);
+          if (transient && attempt < 2) {
+            await sleep(1200);
+            continue;
+          }
+          throw lastErr;
+        }
+
+        let data;
+        try {
+          data = parseJsonLoose(raw);
+        } catch (parseErr) {
+          lastErr = new Error(`HTTP 200 但响应解析失败：${parseErr.message}`);
+          if (attempt < 2) {
+            await sleep(1200);
+            continue;
+          }
+          throw lastErr;
+        }
+
+        const content = extractMessageContent(data);
+        if (!content) {
+          const errMsg = data?.error?.message || "未拿到模型文本输出";
+          lastErr = new Error(errMsg);
+          if (attempt < 2) {
+            await sleep(1200);
+            continue;
+          }
+          throw lastErr;
+        }
+
+        try {
+          const parsed = parseJsonLoose(content);
+          return {
+            answer: parsed.answer || "未返回answer",
+            keypoint: parsed.keypoint || "",
+            keypointMarkdown: parsed.keypoint_markdown || ""
+          };
+        } catch (err) {
+          lastErr = new Error(`模型JSON解析失败：${err.message}`);
+          if (attempt < 2) {
+            await sleep(1200);
+            continue;
+          }
+          throw lastErr;
+        }
+      }
+
+      throw lastErr || new Error("LLM请求失败");
+    }
+
+    function parseMarkdownTable(mdText) {
+      const lines = mdText
+        .split("\n")
+        .map((x) => x.trim())
+        .filter(Boolean);
+      if (lines.length < 2) return null;
+      const isRow = (line) => line.includes("|");
+      if (!isRow(lines[0]) || !isRow(lines[1])) return null;
+      const sep = lines[1].replace(/\|/g, "").trim();
+      if (!/^[-:\s]+$/.test(sep)) return null;
+      const splitRow = (line) =>
+        line
+          .split("|")
+          .map((x) => x.trim())
+          .filter((_, i, arr) => !(i === 0 && arr.length && arr[0] === "") && !(i === arr.length - 1 && arr[arr.length - 1] === ""));
+      const headers = splitRow(lines[0]);
+      const rows = [];
+      for (let i = 2; i < lines.length; i += 1) {
+        if (!isRow(lines[i])) break;
+        rows.push(splitRow(lines[i]));
+      }
+      if (!headers.length || !rows.length) return null;
+      return { headers, rows };
+    }
+
+    function extractTableFromText(text) {
+      const lines = String(text || "").split("\n");
+      for (let i = 0; i < lines.length - 1; i += 1) {
+        const candidate = lines.slice(i).join("\n");
+        const parsed = parseMarkdownTable(candidate);
+        if (parsed) return candidate;
+      }
+      return "";
+    }
+
+    function renderRichSupplement(content) {
+      const raw = String(content || "").trim();
+      if (!raw) return "";
+      const parsedTable = parseMarkdownTable(raw);
+      if (parsedTable) {
+        const th = parsedTable.headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("");
+        const tr = parsedTable.rows
+          .map((row) => `<tr>${row.map((c) => `<td>${escapeHtml(c)}</td>`).join("")}</tr>`)
+          .join("");
+        return `<table><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table>`;
+      }
+      const lines = raw.split("\n");
+      const bulletLines = lines.filter((l) => /^[-*]\s+/.test(l.trim()));
+      if (bulletLines.length === lines.filter((l) => l.trim()).length && bulletLines.length > 0) {
+        return `<ul>${bulletLines.map((l) => `<li>${escapeHtml(l.replace(/^[-*]\s+/, ""))}</li>`).join("")}</ul>`;
+      }
+      return `<div>${escapeHtml(raw).replace(/\n/g, "<br />")}</div>`;
+    }
+
+    function collectExportNotes() {
+      const qa = loadQaStore();
+      const qaArchive = loadQaArchiveStore();
+      const result = [];
+      const topicMap = new Map(topics.map((topic) => [topic.id, topic]));
+      const pushRecordRows = (record, topic) => {
+        if (!topic) return;
+        const stats = topicChecklistStats(topic);
+        record.history.forEach((item, askIdx) => {
+          const supplement = String(item.distilledRich || item.distilledKeypoint || "").trim();
+          const answer = String(item.answer || "").trim();
+          if (!supplement && !answer) return;
+          result.push({
+            topicTitle: topic.title,
+            topicLearned: stats.complete,
+            sectionKey: record.sectionKey,
+            sectionLabel: sectionLabel(record.sectionKey),
+            itemIndex: Number(record.itemIndex || 0) + 1,
+            askRound: askIdx + 1,
+            askedAt: item.askedAt || "",
+            question: item.question || "",
+            answer,
+            supplement
+          });
+        });
+      };
+      Object.entries(qa).forEach(([key, raw]) => {
+        const parsed = parseQaKey(key);
+        const record = normalizeQaRecord(raw, parsed);
+        const topic = topicMap.get(record.topicId);
+        pushRecordRows(record, topic);
+      });
+      qaArchive.forEach((raw) => {
+        const record = normalizeQaRecord(raw, raw || {});
+        const topic = topicMap.get(record.topicId);
+        pushRecordRows(record, topic);
+      });
+      return result;
+    }
+
+    function downloadBlob(content, mimeType, fileName) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function formatExportTimeCompact(date = new Date()) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      const hh = String(date.getHours()).padStart(2, "0");
+      const mm = String(date.getMinutes()).padStart(2, "0");
+      return `${y}${m}${d}${hh}${mm}`;
+    }
+
+    function safeFilePart(text, fallback = "未命名") {
+      const cleaned = String(text || "")
+        .replace(/[\\/:*?"<>|]/g, "_")
+        .replace(/\s+/g, "")
+        .replace(/^方向\d+[:：]\s*/g, "")
+        .trim();
+      return cleaned || fallback;
+    }
+
+    function currentTopicForExport() {
+      const currentId = getTopicIdFromHash();
+      return topics.find((t) => t.id === currentId) || topics[0] || null;
+    }
+
+    function buildExportBaseFileName() {
+      const payload = currentLevel1Payload || {};
+      const topic = currentTopicForExport();
+      const company = safeFilePart(payload?.companyName, "公司");
+      const role = safeFilePart(payload?.roleName, "岗位");
+      const moduleName = safeFilePart(topic ? moduleLabel(resolveMergedModuleKey(topic)) : "方向卡片");
+      const timeStr = formatExportTimeCompact(new Date());
+      return `${company}_${role}_${moduleName}_${timeStr}`;
+    }
+
+    function normalizeExportText(text) {
+      const raw = String(text || "").replace(/\r\n/g, "\n");
+      return raw
+        .replace(/回答会显示在这里\.\.\.|LLM分析中\.\.\.|正在生成参考答案\.\.\./g, "")
+        .replace(/未返回answer|未返回回答|未记录问题/g, "")
+        .replace(/（本轮未提炼补充）/g, "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    function renderPlainMultilineHtml(text) {
+      const cleaned = normalizeExportText(text);
+      if (!cleaned) return "";
+      return `<div class="multiline">${escapeHtml(cleaned).replace(/\n/g, "<br />")}</div>`;
+    }
+
+    function exportNotesAsWord() {
+      const rows = collectExportNotes();
+      const now = new Date().toLocaleString();
+      const fileBaseName = buildExportBaseFileName();
+
+      if (!rows.length) {
+        llmStatusEl.textContent = "暂无可导出内容";
+        return;
+      }
+
+      const grouped = {};
+      rows.forEach((r) => {
+        const key = `${r.topicTitle}${r.topicLearned ? "（已学会）" : ""}`;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(r);
+      });
+
+      const topicSections = Object.entries(grouped).map(([title, items]) => {
+        const blocks = items.map((it) => `
+          <h4>${escapeHtml(it.sectionLabel)} #${it.itemIndex}（第${it.askRound}次提问）</h4>
+          ${it.askedAt ? `<p><strong>提问时间：</strong>${escapeHtml(it.askedAt)}</p>` : ""}
+          ${normalizeExportText(it.question) ? `<div><strong>学习者问题：</strong>${renderPlainMultilineHtml(it.question)}</div>` : ""}
+          ${normalizeExportText(it.answer) ? `<div><strong>LLM回答：</strong>${renderPlainMultilineHtml(it.answer)}</div>` : ""}
+          ${normalizeExportText(it.supplement) ? `<div><strong>提炼补充：</strong></div><div>${renderRichSupplement(normalizeExportText(it.supplement)) || renderPlainMultilineHtml(it.supplement)}</div>` : ""}
+          <hr />
+        `).join("");
+        return `<h3>${escapeHtml(title)}</h3>${blocks}`;
+      }).join("");
+
+      const html = `
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>LLM提炼笔记</title>
+  <style>
+    body { font-family: "Microsoft YaHei", Arial, sans-serif; line-height: 1.55; color: #111827; font-size: 12px; }
+    h1 { margin: 8px 0; font-size: 20px; }
+    h2 { margin: 8px 0; font-size: 16px; }
+    h3 { margin: 8px 0; font-size: 14px; }
+    h4 { margin: 8px 0; font-size: 13px; }
+    p { margin: 4px 0; }
+    .multiline { white-space: normal; word-break: break-word; margin: 4px 0 8px; }
+    table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 12px; }
+    th, td { border: 1px solid #d1d5db; padding: 4px 6px; text-align: left; vertical-align: top; }
+    hr { border: none; border-top: 1px solid #e5e7eb; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>我的LLM提炼笔记</h1>
+  <p>导出时间：${escapeHtml(now)}</p>
+  ${topicSections}
+</body>
+</html>`;
+
+      downloadBlob(html, "application/msword;charset=utf-8", `${fileBaseName}.doc`);
+      llmStatusEl.textContent = `已导出 Word（${rows.length} 条）`;
+    }
+
+    function exportNotesAsExcel() {
+      const rows = collectExportNotes();
+      const fileBaseName = buildExportBaseFileName();
+      if (!rows.length) {
+        llmStatusEl.textContent = "暂无可导出内容";
+        return;
+      }
+
+      const tableRows = rows.map((r) => {
+        const supplementPlain = escapeHtml(normalizeExportText(r.supplement || "")).replace(/\n/g, "&#10;");
+        const answerPlain = escapeHtml(normalizeExportText(r.answer || "")).replace(/\n/g, "&#10;");
+        const questionPlain = escapeHtml(normalizeExportText(r.question || "")).replace(/\n/g, "&#10;");
+        return `
+          <tr>
+            <td>${escapeHtml(r.topicTitle)}</td>
+            <td>${r.topicLearned ? "是" : "否"}</td>
+            <td>${escapeHtml(r.sectionLabel)}</td>
+            <td>${r.itemIndex}</td>
+            <td>${r.askRound}</td>
+            <td>${escapeHtml(r.askedAt || "")}</td>
+            <td>${questionPlain}</td>
+            <td>${answerPlain}</td>
+            <td>${supplementPlain}</td>
+          </tr>
+        `;
+      }).join("");
+
+      const html = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+  <meta charset="utf-8" />
+  <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>LLM笔记</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+  <style>
+    table { border-collapse: collapse; font-size: 12px; }
+    th, td { border: 1px solid #d1d5db; padding: 4px 6px; vertical-align: top; text-align: left; white-space: pre-wrap; word-break: break-word; }
+    th { background: #f3f4f6; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>课题</th>
+        <th>是否已学会</th>
+        <th>章节</th>
+        <th>知识点序号</th>
+        <th>提问轮次</th>
+        <th>提问时间</th>
+        <th>学习者问题</th>
+        <th>LLM回答</th>
+        <th>LLM提炼补充</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${tableRows}
+    </tbody>
+  </table>
+</body>
+</html>`;
+
+      downloadBlob(html, "application/vnd.ms-excel;charset=utf-8", `${fileBaseName}.xls`);
+      llmStatusEl.textContent = `已导出 Excel（${rows.length} 条）`;
+    }
+
+    function getTopicIdFromHash() {
+      const raw = window.location.hash.replace("#", "").trim();
+      const id = decodeURIComponent(raw || "");
+      if (!id) return topics[0].id;
+      const exists = topics.some((t) => t.id === id);
+      return exists ? id : topics[0].id;
+    }
+
+    function priorityClass(p) {
+      if (p === "P0") return "p0";
+      if (p === "P1") return "p1";
+      return "p2";
+    }
+
+    function renderSidebar() {
+      const currentId = getTopicIdFromHash();
+      const checklist = loadChecklist();
+      topicListEl.innerHTML = topics.map((t) => {
+        const stats = topicChecklistStats(t);
+        const moduleStats = computeTopicTaskStats(t, checklist);
+        const cls = [
+          "topic-link",
+          t.id === currentId ? "active" : "",
+          stats.complete ? "learned" : ""
+        ].join(" ").trim();
+        const moduleKey = t._moduleKey || normalizeModuleKey(t);
+        const metaParts = [];
+        const hasTimeline = t._timelineStartDate && t._timelineEndDate && /^topic-merged-/.test(String(t.id || ""));
+        let timelineHtml = "";
+        if (hasTimeline) {
+          const pending = Math.max(0, Number(t._timelinePending || 0));
+          const total = Math.max(0, Number(moduleStats.total || 0));
+          const done = Math.max(0, Number(moduleStats.done || 0));
+          const completion = total > 0 ? Math.max(0, Math.min(100, Math.round((done / total) * 100))) : 0;
+          const spanDays = Math.max(1, Math.ceil((t._timelineEndDate.getTime() - t._timelineStartDate.getTime()) / 86400000) + 1);
+          timelineHtml = `
+            <div class="timeline-visual" title="可按此时间区间安排学习节奏">
+              <div class="timeline-chip-row">
+                <span class="timeline-chip">${formatMonthDayCn(t._timelineStartDate)} - ${formatMonthDayCn(t._timelineEndDate)}</span>
+                <span class="timeline-task-badge">剩余 ${pending} 个</span>
+              </div>
+              <div class="timeline-track">
+                <div class="timeline-fill" style="width:${completion}%"></div>
+              </div>
+              <div class="timeline-foot">
+                <span>完成度 ${completion}%</span>
+                <span class="timeline-progress-count">${done}/${total}</span>
+                <span>${spanDays} 天窗口</span>
+              </div>
+            </div>
+          `;
+        }
+        return `
+          <a class="${cls}" href="#${encodeURIComponent(t.id)}">
+            <div><strong>${t.title}</strong></div>
+            ${metaParts.length ? `<div class="meta">${metaParts.join(" · ")}</div>` : ""}
+            ${timelineHtml}
+          </a>
+        `;
+      }).join("");
+    }
+
+    function renderTrackList(items, topicId, listType) {
+      const list = loadChecklist();
+      return `
+        <ul class="track-list">
+          ${items.map((text, idx) => {
+            const k = checklistKey(topicId, listType, idx);
+            const checked = !!list[k];
+            return `
+              <li class="track-item ${checked ? "done" : ""}">
+                <input type="checkbox" data-role="track-item" data-key="${k}" ${checked ? "checked" : ""} />
+                <span class="track-text">${escapeHtml(text)}</span>
+              </li>
+            `;
+          }).join("")}
+        </ul>
+      `;
+    }
+
+    function renderInteractiveRows(items, topicId, sectionKey) {
+      const qa = loadQaStore();
+      const checklist = loadChecklist();
+      const safeItems = Array.isArray(items) ? items : [];
+      const isCaseQuestionSection = sectionKey === "case_questions";
+      return safeItems.map((item, idx) => {
+        const rawItem = String(item || "");
+        const reasonSplit = rawItem.split("||REASON||");
+        const mainText = String(reasonSplit[0] || "").trim();
+        const reasonText = String(reasonSplit[1] || "").trim();
+        const k = qaKey(topicId, sectionKey, idx);
+        const checklistK = checklistKey(topicId, sectionKey, idx);
+        const checked = !!checklist[checklistK];
+        const record = normalizeQaRecord(qa[k], { topicId, sectionKey, itemIndex: idx, context: item });
+        const latest = record.history[record.history.length - 1] || null;
+        const supplement = latest ? (latest.distilledRich || latest.distilledKeypoint || "") : "";
+        const lastAnswer = latest ? latest.answer : "";
+        const historyHtml = record.history.length
+          ? `
+            <div class="qa-history">
+              <div class="qa-history-title">历史问答（${record.history.length}）</div>
+              ${record.history.map((entry, hIdx) => `
+                <div class="qa-history-item">
+                  <div class="qa-history-q"><strong>Q${hIdx + 1}：</strong>${escapeHtml(entry.question || "（未记录问题）")}</div>
+                  <div class="qa-history-a"><strong>A${hIdx + 1}：</strong>${escapeHtml(entry.answer || "（未返回回答）")}</div>
+                  ${(entry.distilledRich || entry.distilledKeypoint) ? `<div class="qa-history-k"><strong>提炼：</strong>${renderRichSupplement(entry.distilledRich || entry.distilledKeypoint)}</div>` : ""}
+                  ${entry.askedAt ? `<div class="qa-history-time">${escapeHtml(entry.askedAt)}</div>` : ""}
+                </div>
+              `).join("")}
+            </div>
+          `
+          : "";
+        return `
+          <div class="knowledge-row">
+            <div class="knowledge-main">
+              <div class="knowledge-bullet ${checked ? "done" : ""}">
+                <input class="knowledge-bullet-check" type="checkbox" data-role="bullet-point" data-key="${checklistK}" ${checked ? "checked" : ""} />
+                <div class="knowledge-bullet-text">
+                  <div class="knowledge-bullet-main">${escapeHtml(mainText || rawItem)}</div>
+                  ${reasonText ? `<div class="ai-reason-line">AI推荐理由：${escapeHtml(reasonText)}</div>` : ""}
+                </div>
+              </div>
+              ${supplement ? `
+                <div class="knowledge-extra">
+                  <div class="extra-title">LLM提炼补充：</div>
+                  ${renderRichSupplement(supplement)}
+                </div>
+              ` : ""}
+            </div>
+            <div class="knowledge-chat">
+              <textarea data-role="qa-input" data-key="${k}" placeholder="对这个知识点有疑问？在这里提问..."></textarea>
+              <div class="chat-actions">
+                ${isCaseQuestionSection ? `<button class="btn" data-role="case-ref-answer" data-key="${k}" data-topic="${topicId}" data-section="${sectionKey}" data-index="${idx}" data-context="${escapeHtml(item)}">查看参考答案</button>` : ""}
+                <button class="btn" data-role="qa-ask" data-key="${k}" data-topic="${topicId}" data-section="${sectionKey}" data-index="${idx}" data-context="${escapeHtml(item)}">向AI提问</button>
+              </div>
+              <div class="answer ${lastAnswer ? "" : "empty"}" data-role="qa-answer" data-key="${k}">${lastAnswer ? escapeHtml(lastAnswer) : "回答会显示在这里..."}</div>
+              ${historyHtml}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function fallbackBeginnerForTopic(topic) {
+      if (Array.isArray(topic.aiBeginner) && topic.aiBeginner.length) {
+        return topic.aiBeginner;
+      }
+      return [
+        `方向定义：${topic.title} 主要解决什么问题。`,
+        "输入输出：先明确输入信息，再定义输出结果。",
+        "评价标准：通过哪些指标判断你准备得是否有效。",
+        "面试目标：能否在90秒内结构化表达该方向。"
+      ];
+    }
+
+    function fallbackTextbookForTopic(topic) {
+      const aiTextbook = topic.aiTextbook;
+      if (aiTextbook && typeof aiTextbook === "object") {
+        const ensureList = (value, fallback) => {
+          if (Array.isArray(value) && value.length) return value;
+          if (typeof value === "string" && value.trim()) return [value.trim()];
+          return fallback;
+        };
+        return {
+          core: ensureList(aiTextbook.core, ["先明确该方向在岗位中的业务价值。"]),
+          framework: ensureList(aiTextbook.framework, ["定义问题 -> 构建框架 -> 给出可执行方案。"]),
+          formula: String(aiTextbook.formula || "高质量回答 = 结构完整度 * 业务相关度 * 可执行性"),
+          caseDemo: ensureList(aiTextbook.caseDemo, [`围绕“${topic.title}”准备1个真实场景：现状、问题、方案、结果。`]),
+          pitfalls: ensureList(aiTextbook.pitfalls, ["只讲概念，不讲方法与落地。"]),
+          script: String(aiTextbook.script || "我会先定义该方向的问题边界，再给拆解框架和行动方案，最后补风险和验证路径。")
+        };
+      }
+      const hintLines = Array.isArray(topic.sourceHints) && topic.sourceHints.length
+        ? topic.sourceHints.map((x) => `结合JD：${x}`)
+        : ["未匹配到JD中的明确条目，建议在一级页面补充更细JD文本。"];
+      return {
+        core: [
+          "先明确该方向在岗位中的业务价值。",
+          "拆分核心问题：目标、约束、资源、风险。",
+          ...hintLines
+        ],
+        framework: [
+          "三段法：定义问题 -> 构建框架 -> 给出可执行方案。",
+          "量化表达：至少包含1个指标、1个阈值、1个验证动作。"
+        ],
+        formula: "高质量回答 = 结构完整度 * 业务相关度 * 可执行性",
+        caseDemo: [
+          `围绕“${topic.title}”准备1个真实场景：现状、问题、方案、结果。`
+        ],
+        pitfalls: [
+          "只讲概念，不讲方法与落地。",
+          "只讲结论，不讲推导过程。"
+        ],
+        script: "我会先定义该方向的问题边界，再给拆解框架和行动方案，最后补风险和验证路径。"
+      };
+    }
+
+    function extractExperienceModuleInput(payload) {
+      const modules = Array.isArray(payload?.prepModules) ? payload.prepModules : [];
+      const exp = modules.find((m) => String(m?.key || "").trim() === "experience");
+      return String(exp?.rawText || "").trim();
+    }
+
+    function extractResumeEvidenceLinesForExperience(payload) {
+      const resumeFiles = Array.isArray(payload?.learningMaterials?.resumeFiles)
+        ? payload.learningMaterials.resumeFiles
+        : [];
+      const clean = (text) => String(text || "").replace(/\s+/g, " ").trim();
+      const redactSensitive = (text) =>
+        String(text || "")
+          .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, "[邮箱已省略]")
+          .replace(/(?:\+?\d[\d\-\s()]{7,}\d)/g, "[电话已省略]")
+          .replace(/(?:姓名|电话|手机号|邮箱|微信|住址|地址|性别|出生|籍贯|民族|婚姻|政治面貌|身份证|护照)[:：]?\s*[^\s，,；;。]{1,60}/g, "")
+          .replace(/\b\d{7,}\b/g, "[数字已省略]");
+      const stripLeadNoise = (text) =>
+        String(text || "")
+          .replace(/^[A-Za-z\u4e00-\u9fa5]{1,8}\s*[（(].*?[）)]\s*/g, "")
+          .replace(/^(?:邮箱|电话|手机号|email|mail)[:：]?\s*[^\s，,；;。]+/ig, "")
+          .trim();
+      const isLikelyPersonalLine = (text) => {
+        const t = String(text || "");
+        if (!t) return true;
+        if (/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(t)) return true;
+        if (/(?:\+?\d[\d\-\s()]{7,}\d)/.test(t)) return true;
+        if (/^(姓名|电话|手机号|邮箱|微信|住址|地址|性别|出生|籍贯|民族|婚姻|政治面貌)/.test(t)) return true;
+        return false;
+      };
+      const splitToChunks = (text) =>
+        String(text || "")
+          .split(/\n|。|；|;|！|!|\?|？/)
+          .map((x) => clean(x))
+          .filter((x) => x.length >= 12 && x.length <= 180);
+      const hasActionSignal = (text) => /(负责|主导|推动|优化|搭建|分析|管理|实施|上线|提升|增长|降低|协同|设计|交付|复盘)/.test(String(text || ""));
+      const lines = [];
+      resumeFiles.slice(0, 8).forEach((file) => {
+        const name = clean(file?.name || "");
+        const parseStatus = String(file?.parseStatus || "").trim();
+        if (parseStatus && parseStatus !== "success") return;
+        const rawPreview = clean(file?.textPreview || "")
+          .replace(/（?浏览器内暂存元数据，?完整解析需后端）?/g, "")
+          .replace(/（?浏览器内暂存元数据，?完整解析需后续接入后端）?/g, "")
+          .replace(/（?解析失败[:：][^）)]*）?/g, "")
+          .trim();
+        const withoutTypeTag = rawPreview.replace(/^\[[A-Z]+\]\s*/i, "").trim();
+        const contentOnly = withoutTypeTag
+          .replace(new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*[|：:-]?\\s*`, "i"), "")
+          .trim();
+        const noSubstance = !contentOnly || contentOnly === name;
+        if (noSubstance) return;
+        const redacted = redactSensitive(contentOnly);
+        const chunks = splitToChunks(redacted);
+        const scored = chunks
+          .map((rawChunk) => stripLeadNoise(rawChunk))
+          .filter((chunk) => chunk && !isLikelyPersonalLine(chunk))
+          .map((chunk) => ({ chunk, score: (hasActionSignal(chunk) ? 2 : 0) + (/(项目|系统|策略|指标|优化|增长|成本|效率|用户|产品|数据|复盘|落地|协同)/.test(chunk) ? 1 : 0) }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+          .map((x) => x.chunk);
+        scored.forEach((chunk) => {
+          if (!lines.includes(chunk)) lines.push(chunk);
+        });
+      });
+      return lines;
+    }
+
+    function summarizeResumeParseStats(payload) {
+      const files = Array.isArray(payload?.learningMaterials?.resumeFiles)
+        ? payload.learningMaterials.resumeFiles
+        : [];
+      const total = files.length;
+      const success = files.filter((f) => String(f?.parseStatus || "").trim() === "success").length;
+      const unsupported = files.filter((f) => String(f?.parseStatus || "").trim() === "unsupported").length;
+      const failed = Math.max(0, total - success - unsupported);
+      return { total, success, failed, unsupported };
+    }
+
+    function resolveMergedModuleKey(topic) {
+      const id = String(topic?.id || "");
+      const fromId = id.match(/^topic-merged-(technical|experience|behavioral|case)$/);
+      if (fromId && fromId[1]) return fromId[1];
+      return normalizeModuleKey(topic);
+    }
+
+    function inferExperienceOverlapSummary(topic) {
+      const payload = currentLevel1Payload || {};
+      const roleName = String(payload?.roleName || "").trim();
+      const sourceHints = Array.isArray(topic?.sourceHints) ? topic.sourceHints : [];
+      const jdClues = extractContextFromJD(payload, topic?.title || "").slice(0, 3);
+      const targetTokens = tokenizeFocus(`${roleName} ${sourceHints.join(" ")} ${jdClues.join(" ")}`);
+      const resumeLines = extractResumeDigest(payload)
+        .map((x) => String(x || "").replace(/^[^|]*\|/, "").trim())
+        .filter(Boolean);
+      const expInputLines = splitToLines(extractExperienceModuleInput(payload));
+      const candidates = [...resumeLines, ...expInputLines]
+        .map((x) => String(x || "").trim())
+        .filter((x) => x.length >= 8)
+        .slice(0, 20);
+      const scored = candidates.map((line) => {
+        const lower = line.toLowerCase();
+        let score = 0;
+        targetTokens.forEach((t) => {
+          if (lower.includes(t)) score += 2;
+        });
+        if (/负责|推动|优化|分析|增长|转化|策略|协同|项目/.test(line)) score += 1;
+        return { line, score };
+      }).sort((a, b) => b.score - a.score);
+      const best = scored[0]?.line || expInputLines[0] || resumeLines[0] || "";
+      if (best) {
+        return `识别到与你目标岗位重叠的经历：${best}`;
+      }
+      return "识别到与你目标岗位重叠的经历：请补充“既有经历深挖”内容并上传简历，以便更精准识别。";
+    }
+
+    function inferExperienceOverlapItems(topic) {
+      const payload = currentLevel1Payload || {};
+      const roleName = String(payload?.roleName || "").trim();
+      const sourceHints = Array.isArray(topic?.sourceHints) ? topic.sourceHints : [];
+      const jdClues = extractContextFromJD(payload, topic?.title || "").slice(0, 3);
+      const targetTokens = tokenizeFocus(`${roleName} ${sourceHints.join(" ")} ${jdClues.join(" ")}`);
+      const resumeLines = extractResumeEvidenceLinesForExperience(payload);
+      const expInputLines = splitToLines(extractExperienceModuleInput(payload));
+      const candidates = [...resumeLines, ...expInputLines]
+        .map((x) => String(x || "").trim())
+        .filter((x) => x.length >= 8)
+        .slice(0, 24);
+      const scored = candidates.map((line) => {
+        const lower = line.toLowerCase();
+        let score = 0;
+        targetTokens.forEach((t) => {
+          if (lower.includes(t)) score += 2;
+        });
+        if (/负责|推动|优化|分析|增长|转化|策略|协同|项目/.test(line)) score += 1;
+        return { line, score };
+      }).sort((a, b) => b.score - a.score);
+      const unique = [];
+      scored.forEach((item) => {
+        const text = String(item?.line || "").trim();
+        if (!text) return;
+        if (unique.includes(text)) return;
+        unique.push(text);
+      });
+      if (unique.length) return unique.slice(0, 3);
+      const stats = summarizeResumeParseStats(payload);
+      if (!stats.total) return ["未检测到已上传简历，请先上传简历文件。"];
+      if (!stats.success) return [`已上传${stats.total}份简历，但正文解析成功0份，请更换可解析文件（推荐 PDF/TXT/DOCX/清晰图片）。`];
+      return ["已检测到简历，但未识别到可匹配目标岗位的明确经历片段，请补充“既有经历深挖”文本。"];
+    }
+
+    function buildExperienceDeepDiveQuestions(topic) {
+      const payload = currentLevel1Payload || {};
+      const roleName = String(payload?.roleName || "").trim();
+      const experienceInputLines = splitToLines(extractExperienceModuleInput(payload));
+      const resumeInputLines = extractResumeEvidenceLinesForExperience(payload);
+      const sourceLines = [
+        ...experienceInputLines,
+        ...resumeInputLines,
+        ...extractContextFromJD(payload, topic?.title || "").slice(0, 4)
+      ];
+      const stopWords = new Set(["我们", "你们", "以及", "相关", "目标", "岗位", "能力", "经验", "项目", "负责", "进行", "通过"]);
+      const keywordPool = [];
+      sourceLines.forEach((line) => {
+        String(line || "")
+          .split(/[\s，,。；;：:（）()【】\[\]\/\-]/)
+          .map((x) => x.trim())
+          .filter((x) => x.length >= 2 && x.length <= 12 && !stopWords.has(x))
+          .forEach((x) => {
+            if (!keywordPool.includes(x)) keywordPool.push(x);
+          });
+      });
+      const k1 = keywordPool[0] || "策略分析";
+      const k2 = keywordPool[1] || "跨团队协同";
+      const k3 = keywordPool[2] || "数据驱动优化";
+      const deepDive = [
+        `1.1 你在该段经历中具体承担了哪些与「${k1}」和「${k2}」相关的职责？请按“背景-动作-结果”展开。`,
+        `1.1 该段经历里，你做过哪些关键决策能体现「${k3}」能力？当时依据是什么？`,
+        "1.1 这段经历里最能体现你业务判断力的一次取舍是什么？如果重来一次你会如何优化？",
+        `1.1 针对面试岗位「${roleName || "目标岗位"}」，这段经历中哪些可量化结果最值得优先讲？对应指标是多少？`
+      ];
+      return deepDive.slice(0, 5);
+    }
+
+    function buildExperienceMigrationQuestions(topic) {
+      const payload = currentLevel1Payload || {};
+      const roleName = String(payload?.roleName || "").trim();
+      return [
+        `2.1 在该段经历中，你认为最可迁移到「${roleName || "目标岗位"}」的3个takeaways是什么？分别能解决岗位中的什么问题？`,
+        "2.1 这些takeaways里，哪一个最能体现你的方法论可复用性？请给出“可迁移场景 + 预期结果”。",
+        `2.2 你认为自己距离「${roleName || "目标岗位"}」目前还存在哪些能力或经历上的gap？请至少列出2-3项。`,
+        "2.2 针对每个gap，你计划如何弥合（学习/项目补齐/表达优化）？请给出时间表与验证标准。"
+      ];
+    }
+
+    function buildDirection2BulletPoints(topic) {
+      const payload = currentLevel1Payload || {};
+      const unique = (arr) => {
+        const out = [];
+        (arr || []).forEach((x) => {
+          const text = String(x || "").trim();
+          if (!text) return;
+          if (out.includes(text)) return;
+          out.push(text);
+        });
+        return out;
+      };
+      const mismatchMsg = "该岗位与你的既有经历偏差过大，暂无相关建议";
+      const resumeEvidence = extractResumeEvidenceLinesForExperience(payload).slice(0, 8);
+      const experienceInputLines = splitToLines(extractExperienceModuleInput(payload)).slice(0, 6);
+      const buildJdPersonaTokens = () => {
+        const role = String(payload?.roleName || "").trim();
+        const jdRaw = String(payload?.jobDescription || "");
+        const jdLines = splitToLines(jdRaw);
+        const personaLines = jdLines.filter((line) => /(负责|要求|能力|经验|任职|资格|加分|优先|技能|职责|岗位|画像)/.test(line));
+        const tokenSource = [role, ...personaLines.slice(0, 24)].join(" ");
+        const stopWords = new Set([
+          "负责", "要求", "能力", "经验", "岗位", "职责", "任职", "资格", "优先", "技能", "相关", "具有", "熟悉", "能够",
+          "我们", "你们", "以及", "进行", "通过", "工作", "项目", "团队", "完成", "以上"
+        ]);
+        return unique(tokenizeFocus(tokenSource).filter((t) => t.length >= 2 && !stopWords.has(t))).slice(0, 120);
+      };
+      const jdPersonaTokens = buildJdPersonaTokens();
+      const evidenceTokens = unique([
+        ...resumeEvidence.flatMap((x) => tokenizeFocus(x)),
+        ...experienceInputLines.flatMap((x) => tokenizeFocus(x))
+      ]).filter((x) => x.length >= 2);
+      const overlapTokens = jdPersonaTokens.filter((t) => evidenceTokens.includes(t));
+      const overlapRatio = jdPersonaTokens.length ? overlapTokens.length / jdPersonaTokens.length : 0;
+      const minTokenLen = 2;
+      const hasEvidenceToken = (text) => {
+        const lower = String(text || "").toLowerCase();
+        return evidenceTokens.some((t) => t.length >= minTokenLen && lower.includes(t));
+      };
+      const hasJdToken = (text) => {
+        const lower = String(text || "").toLowerCase();
+        return jdPersonaTokens.some((t) => t.length >= minTokenLen && lower.includes(t));
+      };
+      const isIndustryLike = (text) => /(行业|价值链|上游|中游|下游|竞争格局|竞品|市场份额|行业趋势|1A|1B|1C|1D|1DA|1E)/.test(String(text || ""));
+      const aiExperienceBulletsRaw = unique(
+        (Array.isArray(payload?.aiTopicBlueprints) ? payload.aiTopicBlueprints : [])
+          .filter((x) => String(x?.moduleKey || "").trim() === "experience")
+          .flatMap((x) => Array.isArray(x?.knowledge) ? x.knowledge : [])
+      );
+      const tooRawResumeLike = (text) =>
+        /来源文件|候选经历片段|邮箱已省略|电话已省略|请补充你在该经历中的具体职责/.test(String(text || ""))
+        || String(text || "").length > 220;
+      const aiExperienceBullets = aiExperienceBulletsRaw
+        .filter((x) => !isIndustryLike(x))
+        .filter((x) => !tooRawResumeLike(x))
+        .filter((x) => !evidenceTokens.length || hasEvidenceToken(x))
+        .filter((x) => !jdPersonaTokens.length || hasJdToken(x));
+      if (aiExperienceBullets.length >= 3) return aiExperienceBullets.slice(0, 12);
+      const topicBullets = unique(Array.isArray(topic?.knowledge) ? topic.knowledge : []);
+      const cleanedTopicBullets = topicBullets
+        .filter((x) => !isIndustryLike(x))
+        .filter((x) => !tooRawResumeLike(x))
+        .filter((x) => !evidenceTokens.length || hasEvidenceToken(x))
+        .filter((x) => !jdPersonaTokens.length || hasJdToken(x));
+      if (cleanedTopicBullets.length >= 3) return cleanedTopicBullets.slice(0, 12);
+      const roleName = String(payload?.roleName || "").trim();
+      const jdHints = extractContextFromJD(payload, roleName || String(topic?.title || "")).slice(0, 2);
+      const stats = summarizeResumeParseStats(payload);
+      if (stats.total && !stats.success) {
+        return [`已上传${stats.total}份简历，但正文解析成功0份，请回一级页面重新上传可解析格式后再生成方向2内容。`];
+      }
+      if (!stats.total && !experienceInputLines.length) {
+        return ["方向2缺少输入：请先上传简历或补充“既有经历深挖”文本后再生成。"];
+      }
+      // Relax mismatch detection: only trigger when JD tokens are sufficiently rich
+      // and overlap is both absolutely and relatively very low.
+      if (
+        jdPersonaTokens.length >= 10
+        && evidenceTokens.length >= 8
+        && overlapTokens.length === 0
+        && overlapRatio < 0.03
+      ) {
+        return [mismatchMsg];
+      }
+      const sanitizeExperienceLine = (line) =>
+        String(line || "")
+          .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig, "")
+          .replace(/(?:\+?\d[\d\-\s()]{7,}\d)/g, "")
+          .replace(/(?:姓名|电话|手机号|邮箱|微信|住址|地址|性别|出生|籍贯|民族|婚姻|政治面貌)[:：]?\s*[^\s，,；;。]{1,60}/g, "")
+          .replace(/\[[^\]]*省略[^\]]*\]/g, "")
+          .replace(/\(\s*\)/g, "")
+          .replace(/\s{2,}/g, " ")
+          .replace(/^[，,；;：:\s]+|[，,；;：:\s]+$/g, "")
+          .trim();
+      const resumeConcrete = resumeEvidence
+        .map((line) => sanitizeExperienceLine(line))
+        .filter((x) => x && x.length >= 10)
+        .slice(0, 4);
+      const topPersona = jdPersonaTokens.slice(0, 8);
+      const mapToJd = (line) => {
+        const lower = String(line || "").toLowerCase();
+        const hits = topPersona.filter((t) => lower.includes(t)).slice(0, 3);
+        return hits.length ? hits.join(" / ") : "岗位关键能力（请结合JD继续细化）";
+      };
+      const fallbackBullets = unique([
+        ...resumeConcrete.map((line) => `${line}||REASON||可映射到岗位画像中的「${mapToJd(line)}」`),
+        ...experienceInputLines.slice(0, 2).map((line) => `${line}；建议补充结果指标（效率/质量/成本/收入）增强说服力。`),
+        jdHints[0] ? `结合JD要求「${jdHints[0]}」，优先选择最能体现该能力的经历作为主故事。` : "",
+        "可口述模板：背景-目标-关键动作-量化结果-复盘改进（60-90秒）。"
+      ]);
+      if (fallbackBullets.length) return fallbackBullets.slice(0, 10);
+      return ["方向2尚未生成有效要点，请回一级页点击“生成并打开找工准备计划”后重试。"];
+    }
+
+    function renderDetail() {
+      const id = getTopicIdFromHash();
+      const topic = topics.find((t) => t.id === id) || topics[0];
+      const textbook = textbookById[topic.id] || fallbackTextbookForTopic(topic);
+      const beginner = beginnerById[topic.id] || fallbackBeginnerForTopic(topic);
+      const moduleKey = resolveMergedModuleKey(topic);
+      const industrySections = buildIndustrySections(topic);
+      const isIndustry = moduleKey === "technical";
+      const useFlatForEBC = ["experience", "behavioral", "case"].includes(moduleKey);
+      const flatKnowledge = Array.isArray(topic.knowledge) && topic.knowledge.length
+        ? topic.knowledge
+        : [`${topic.title}：暂无可展示要点，请回一级页补充该方向输入。`];
+      const flatAction = Array.isArray(topic.action) && topic.action.length
+        ? topic.action
+        : ["建议补充可量化经历后再生成。"];
+      const flatInterview = String(topic.interview || "").trim();
+      const flatTopicHtml = `
+        <div class="textbook-block">
+          <div class="industry-tip">提示：每学会一个知识点请打勾，便于计算学习进度</div>
+          <div class="textbook-section">
+            <h4>重点阐述内容（Bullet Points）</h4>
+            ${renderInteractiveRows(flatKnowledge, topic.id, "focus_points")}
+          </div>
+          <div class="textbook-section">
+            <h4>表达与演练建议</h4>
+            ${renderInteractiveRows(flatAction, topic.id, "delivery_actions")}
+          </div>
+          ${flatInterview ? `
+            <div class="script-box">
+              <strong>口述主线（60-90秒）：</strong>${escapeHtml(flatInterview)}
+            </div>
+          ` : ""}
+        </div>
+      `;
+      let experienceTopicHtml = "";
+      if (moduleKey === "experience") {
+        const d2Bullets = buildDirection2BulletPoints(topic);
+        const resumeParseStats = summarizeResumeParseStats(currentLevel1Payload || {});
+        const onlyMismatch = d2Bullets.length === 1 && d2Bullets[0] === "该岗位与你的既有经历偏差过大，暂无相关建议";
+        experienceTopicHtml = `
+          <div class="textbook-block">
+            <div class="experience-top-stack">
+              <div class="experience-top-module">简历解析状态：已上传${resumeParseStats.total}份，成功解析${resumeParseStats.success}份，失败${resumeParseStats.failed}份${resumeParseStats.unsupported ? `，不支持${resumeParseStats.unsupported}份` : ""}</div>
+              <div class="experience-top-module">提示：每学会一个知识点请打勾，便于计算学习进度</div>
+            </div>
+            <div class="textbook-section">
+              <h4>相关经历深挖</h4>
+              ${onlyMismatch
+                ? `<div class="hint">${escapeHtml(d2Bullets[0])}</div>`
+                : renderInteractiveRows(d2Bullets, topic.id, "experience_bullets")}
+            </div>
+          </div>
+        `;
+      }
+      const buildingModuleHtml = `
+        <div class="textbook-block">
+          <div class="module-building-placeholder">该模块内容受时间限制仍在搭建中，目前仅显示若干个标准化的案例模拟，后续将新增基于用户上传JD的个性化案例模拟生成功能。</div>
+        </div>
+      `;
+      const caseQuestions = (Array.isArray(dynamicCaseQuestions) && dynamicCaseQuestions.length >= 5)
+        ? dynamicCaseQuestions.slice(0, 5)
+        : fallbackCaseQuestionsFromKeywords(currentLevel1Payload || {});
+      const caseModuleHtml = `
+        <div class="textbook-block">
+          <div class="textbook-section">
+            <div class="case-section-header">
+              <h4>典型情景案例模拟（建议逐题演练）</h4>
+              <button class="btn refresh-case-btn" data-role="refresh-case-questions">刷新模拟题</button>
+            </div>
+            ${renderInteractiveRows(caseQuestions, topic.id, "case_questions")}
+          </div>
+        </div>
+      `;
+      const behavioralQuestions = getBehavioralQuestions();
+      const behavioralModuleHtml = `
+        <div class="textbook-block">
+          <div class="module-building-placeholder">该模块内容受时间限制仍在搭建中，目前仅显示若干条标准化的行为面试题，后续将新增基于用户上传JD的个性化行为面试题生成功能。</div>
+          <div class="textbook-section">
+            <h4>典型行为面试题（建议逐条准备）</h4>
+            ${renderInteractiveRows(behavioralQuestions, topic.id, "behavioral_questions")}
+          </div>
+        </div>
+      `;
+      const textbookHtml = textbook ? `
+        <div class="textbook-block">
+          <h3>课本内容（展开学习）</h3>
+          <div class="textbook-section">
+            <h4>0) 小白概念入门（先读这个）</h4>
+            ${renderInteractiveRows(beginner, topic.id, "beginner")}
+          </div>
+          <div class="textbook-section">
+            <h4>1) 核心认知</h4>
+            ${renderInteractiveRows(textbook.core, topic.id, "core")}
+          </div>
+          <div class="textbook-section">
+            <h4>2) 实操框架</h4>
+            ${renderInteractiveRows(textbook.framework, topic.id, "framework")}
+            <div class="formula">${textbook.formula}</div>
+          </div>
+          <div class="textbook-section">
+            <h4>3) 场景示例</h4>
+            ${renderInteractiveRows(textbook.caseDemo, topic.id, "caseDemo")}
+          </div>
+          <div class="textbook-section">
+            <h4>4) 常见误区</h4>
+            ${renderInteractiveRows(textbook.pitfalls, topic.id, "pitfalls")}
+          </div>
+          <div class="script-box">
+            <strong>可直接背诵话术：</strong>${textbook.script}
+          </div>
+        </div>
+      ` : "";
+      const industryProfile = detectIndustryProfile(topic);
+      const industryDict = topic?.aiIndustry?.dictionary && typeof topic.aiIndustry.dictionary === "object"
+        ? topic.aiIndustry.dictionary
+        : null;
+      const industryName = String(
+        industryDict?.industry
+        || topic?.aiIndustry?.industryName
+        || industryProfile.name
+        || ""
+      ).trim();
+      const keywordList = Array.isArray(industryDict?.keywords) && industryDict.keywords.length
+        ? industryDict.keywords
+        : Array.isArray(topic?.aiIndustry?.keywords) && topic.aiIndustry.keywords.length
+          ? topic.aiIndustry.keywords
+          : industryProfile.jdClues.slice(0, 3);
+      const industryHtml = `
+        <div class="textbook-block">
+          ${industryName || keywordList.length ? `<div class="industry-tags">${industryName ? `<div class="industry-tag-line"><strong>行业判断：</strong>${escapeHtml(industryName)}</div>` : ""}${keywordList.length ? `<div class="industry-tag-line"><strong>关键词：</strong>${escapeHtml(keywordList.join("、"))}</div>` : ""}</div>` : ""}
+          <div class="industry-tip">提示：每学会一个知识点请打勾，便于计算学习进度</div>
+          ${industrySections.map((block) => `
+            <div class="industry-block">
+              <h4>${block.title}</h4>
+              ${renderInteractiveRows(block.items, topic.id, block.sectionKey)}
+            </div>
+          `).join("")}
+        </div>
+      `;
+      topicDetailEl.className = `card topic-content`;
+      topicDetailEl.innerHTML = `
+        ${isIndustry ? industryHtml : (moduleKey === "experience" ? experienceTopicHtml : (moduleKey === "behavioral" ? behavioralModuleHtml : (moduleKey === "case" ? caseModuleHtml : (useFlatForEBC ? flatTopicHtml : textbookHtml))))}
+      `;
+      const refreshCaseInCardBtn = topicDetailEl.querySelector('[data-role="refresh-case-questions"]');
+      if (refreshCaseInCardBtn) {
+        refreshCaseInCardBtn.addEventListener("click", async () => {
+          refreshCaseInCardBtn.disabled = true;
+          try {
+            archiveAndClearQaRecords(topic.id, ["case_questions"]);
+            await refreshCaseQuestionsAndRender(true);
+          } finally {
+            refreshCaseInCardBtn.disabled = false;
+          }
+        });
+      }
+      bindTrackItemHandlers();
+      bindQaHandlers(topic.id);
+    }
+
+    function bindTrackItemHandlers() {
+      const boxes = topicDetailEl.querySelectorAll('[data-role="track-item"]');
+      boxes.forEach((box) => {
+        box.addEventListener("change", () => {
+          const key = box.getAttribute("data-key");
+          const list = loadChecklist();
+          list[key] = box.checked;
+          saveChecklist(list);
+          renderSidebar();
+          renderDetail();
+          renderProgress();
+        });
+      });
+      const bulletBoxes = topicDetailEl.querySelectorAll('[data-role="bullet-point"]');
+      bulletBoxes.forEach((box) => {
+        box.addEventListener("change", () => {
+          const key = box.getAttribute("data-key");
+          const list = loadChecklist();
+          list[key] = box.checked;
+          saveChecklist(list);
+          renderSidebar();
+          renderDetail();
+          renderProgress();
+        });
+      });
+    }
+
+    function bindQaHandlers(topicId) {
+      const askButtons = topicDetailEl.querySelectorAll('[data-role="qa-ask"]');
+      askButtons.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const key = btn.getAttribute("data-key");
+          const context = btn.getAttribute("data-context") || "";
+          const inputEl = topicDetailEl.querySelector(`[data-role="qa-input"][data-key="${key}"]`);
+          const answerEl = topicDetailEl.querySelector(`[data-role="qa-answer"][data-key="${key}"]`);
+          const question = (inputEl?.value || "").trim();
+          if (!question) {
+            answerEl.textContent = "请先输入问题。";
+            answerEl.classList.remove("empty");
+            return;
+          }
+          const config = loadLlmConfig();
+          if (!config.endpoint || !config.model || !config.apiKey) {
+            answerEl.textContent = "请先在一级页面配置模型与API Key后再提问。";
+            answerEl.classList.remove("empty");
+            return;
+          }
+          btn.disabled = true;
+          answerEl.textContent = "LLM分析中...";
+          answerEl.classList.remove("empty");
+          try {
+            const result = await callLLM(config, question, context);
+            const richFromModel = (result.keypointMarkdown || "").trim();
+            const tableFromAnswer = extractTableFromText(result.answer || "");
+            const rich = richFromModel || tableFromAnswer;
+            const qa = loadQaStore();
+            const sectionKey = btn.getAttribute("data-section") || "";
+            const itemIndex = Number(btn.getAttribute("data-index") || "0");
+            const current = normalizeQaRecord(qa[key], {
+              topicId,
+              sectionKey,
+              itemIndex,
+              context
+            });
+            current.history.push({
+              question,
+              answer: result.answer,
+              distilledKeypoint: result.keypoint,
+              distilledRich: rich,
+              askedAt: new Date().toLocaleString()
+            });
+            qa[key] = {
+              topicId: current.topicId,
+              sectionKey: current.sectionKey,
+              itemIndex: current.itemIndex,
+              context: current.context,
+              history: current.history
+            };
+            saveQaStore(qa);
+            if (inputEl) inputEl.value = "";
+            renderDetail();
+            renderSidebar();
+            renderProgress();
+          } catch (err) {
+            answerEl.textContent = `LLM调用失败：${err.message}`;
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      });
+      const caseRefButtons = topicDetailEl.querySelectorAll('[data-role="case-ref-answer"]');
+      caseRefButtons.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const key = btn.getAttribute("data-key");
+          const context = btn.getAttribute("data-context") || "";
+          const answerEl = topicDetailEl.querySelector(`[data-role="qa-answer"][data-key="${key}"]`);
+          const config = loadLlmConfig();
+          if (!config.endpoint || !config.model || !config.apiKey) {
+            answerEl.textContent = "请先在一级页面配置模型与API Key后再生成参考答案。";
+            answerEl.classList.remove("empty");
+            return;
+          }
+          const roleName = String(currentLevel1Payload?.roleName || "目标岗位").trim();
+          const jdHints = splitToLines(String(currentLevel1Payload?.jobDescription || "")).slice(0, 6).join("；");
+          const prompt = `请给出这道情景案例题的参考答案，结构为“问题定义-分析框架-行动方案-风险与验证-30秒总结”，并尽量贴合岗位：${roleName}。题目：${context}。岗位关键词：${jdHints || roleName}`;
+          btn.disabled = true;
+          answerEl.textContent = "正在生成参考答案...";
+          answerEl.classList.remove("empty");
+          try {
+            const result = await callLLM(config, prompt, context);
+            const richFromModel = (result.keypointMarkdown || "").trim();
+            const tableFromAnswer = extractTableFromText(result.answer || "");
+            const rich = richFromModel || tableFromAnswer;
+            const qa = loadQaStore();
+            const sectionKey = btn.getAttribute("data-section") || "";
+            const itemIndex = Number(btn.getAttribute("data-index") || "0");
+            const current = normalizeQaRecord(qa[key], {
+              topicId,
+              sectionKey,
+              itemIndex,
+              context
+            });
+            current.history.push({
+              question: "查看参考答案",
+              answer: result.answer,
+              distilledKeypoint: result.keypoint,
+              distilledRich: rich,
+              askedAt: new Date().toLocaleString()
+            });
+            qa[key] = {
+              topicId: current.topicId,
+              sectionKey: current.sectionKey,
+              itemIndex: current.itemIndex,
+              context: current.context,
+              history: current.history
+            };
+            saveQaStore(qa);
+            renderDetail();
+            renderSidebar();
+            renderProgress();
+          } catch (err) {
+            answerEl.textContent = `参考答案生成失败：${err.message}`;
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      });
+    }
+
+    function renderProgress() {
+      if (!progressSummaryEl) return;
+      let done = 0;
+      let total = 0;
+      let p0Done = 0;
+      let p0Total = 0;
+      topics.forEach((t) => {
+        const stats = topicChecklistStats(t);
+        done += stats.done;
+        total += stats.total;
+        if (t.priority === "P0") {
+          p0Done += stats.done;
+          p0Total += stats.total;
+        }
+      });
+      progressSummaryEl.textContent = `总进度（知识点+动作）：${done}/${total}；核心P0进度：${p0Done}/${p0Total}。建议先把P0条目全部勾完。`;
+    }
+
+    function renderAll() {
+      renderSidebar();
+      renderDetail();
+      renderProgress();
+    }
+
+    applyLevel1Handoff();
+    initLlmTools();
+    window.addEventListener("hashchange", renderAll);
+    renderAll();
+    if (!Array.isArray(dynamicCaseQuestions) || dynamicCaseQuestions.length < 5) {
+      refreshCaseQuestionsAndRender(false);
+    }
+  </script>
+</body>
+</html>
